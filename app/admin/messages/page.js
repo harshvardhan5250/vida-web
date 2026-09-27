@@ -1,147 +1,186 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { onAuthStateChanged } from "firebase/auth";
 import {
   collection,
   onSnapshot,
   orderBy,
   query,
 } from "firebase/firestore";
+import {
+  onAuthStateChanged,
+} from "firebase/auth";
 
 import { auth, db } from "../../../lib/firebase";
 
 export default function AdminMessagesPage() {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        window.location.href = "/login";
-        return;
+    const unsubscribeAuth = onAuthStateChanged(
+      auth,
+      (currentUser) => {
+        setUser(currentUser);
       }
-
-      const messagesQuery = query(
-        collection(db, "messages"),
-        orderBy("createdAt", "desc")
-      );
-
-      const unsubscribeMessages = onSnapshot(
-        messagesQuery,
-        (snapshot) => {
-          const data = snapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }));
-
-          setMessages(data);
-          setLoading(false);
-        },
-        (error) => {
-          console.error("Messages error:", error);
-          setLoading(false);
-        }
-      );
-
-      return unsubscribeMessages;
-    });
+    );
 
     return () => unsubscribeAuth();
   }, []);
 
+  useEffect(() => {
+    if (!user) {
+      setLoading(false);
+      return;
+    }
+
+    const messagesQuery = query(
+      collection(db, "messages"),
+      orderBy("createdAt", "desc")
+    );
+
+    const unsubscribeMessages = onSnapshot(
+      messagesQuery,
+      (snapshot) => {
+        const messageData = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        setMessages(messageData);
+        setLoading(false);
+      },
+      (error) => {
+        console.error("Messages error:", error);
+        setLoading(false);
+      }
+    );
+
+    return () => unsubscribeMessages();
+  }, [user]);
+
+  if (loading) {
+    return (
+      <main className="dashboardPage">
+        <div className="dashboardContainer">
+          <p>Loading messages...</p>
+        </div>
+      </main>
+    );
+  }
+
+  if (!user) {
+    return (
+      <main className="dashboardPage">
+        <div className="dashboardContainer">
+          <h1>Admin Messages</h1>
+          <p>Please login to access messages.</p>
+        </div>
+      </main>
+    );
+  }
+
   return (
-    <div className="adminPage">
+    <main className="dashboardPage">
+      <div className="dashboardContainer">
 
-      <div className="adminHeader">
+        <div className="dashboardHeader">
+          <div>
+            <p className="sectionLabel">
+              ADMIN PANEL
+            </p>
 
-        <p className="sectionLabel">
-          ADMIN PANEL
-        </p>
+            <h1>
+              Customer Messages
+            </h1>
 
-        <h1>Customer Messages</h1>
+            <p>
+              View messages received from VIDA WEB customers.
+            </p>
+          </div>
+        </div>
 
-        <p>
-          View and manage messages received
-          from VIDA WEB customers.
-        </p>
+        <div className="dashboardCard">
+
+          {messages.length === 0 ? (
+            <div className="emptyState">
+              <h3>No messages yet</h3>
+              <p>
+                Customer messages will appear here.
+              </p>
+            </div>
+          ) : (
+            <div className="adminTableWrapper">
+
+              <table className="adminTable">
+
+                <thead>
+                  <tr>
+                    <th>Customer</th>
+                    <th>Email</th>
+                    <th>Subject</th>
+                    <th>Message</th>
+                    <th>Project</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+
+                  {messages.map((message) => (
+                    <tr key={message.id}>
+
+                      <td>
+                        {message.name || "N/A"}
+                      </td>
+
+                      <td>
+                        {message.email || "N/A"}
+                      </td>
+
+                      <td>
+                        {message.subject || "General Inquiry"}
+                      </td>
+
+                      <td>
+                        <div className="messageTableText">
+                          {message.message || "N/A"}
+                        </div>
+                      </td>
+
+                      <td>
+                        {message.projectName || "General"}
+                      </td>
+
+                      <td>
+                        <span className="statusBadge">
+                          {message.status || "Unread"}
+                        </span>
+                      </td>
+
+                      <td>
+                        {message.createdAt?.toDate
+                          ? message.createdAt
+                              .toDate()
+                              .toLocaleDateString("en-IN")
+                          : "—"}
+                      </td>
+
+                    </tr>
+                  ))}
+
+                </tbody>
+
+              </table>
+
+            </div>
+          )}
+
+        </div>
 
       </div>
-
-      {loading ? (
-        <p>Loading messages...</p>
-      ) : messages.length === 0 ? (
-
-        <div className="adminEmpty">
-
-          <h2>No messages yet</h2>
-
-          <p>
-            Customer messages will appear here.
-          </p>
-
-        </div>
-
-      ) : (
-
-        <div className="adminTableWrapper">
-
-          <table className="adminTable">
-
-            <thead>
-
-              <tr>
-                <th>Customer</th>
-                <th>Email</th>
-                <th>Message</th>
-                <th>Sender</th>
-                <th>Date</th>
-              </tr>
-
-            </thead>
-
-            <tbody>
-
-              {messages.map((message) => (
-
-                <tr key={message.id}>
-
-                  <td>
-                    {message.name || "Unknown"}
-                  </td>
-
-                  <td>
-                    {message.email || "-"}
-                  </td>
-
-                  <td className="messageCell">
-                    {message.message || "-"}
-                  </td>
-
-                  <td>
-                    {message.sender || "customer"}
-                  </td>
-
-                  <td>
-                    {message.createdAt?.toDate
-                      ? message.createdAt
-                          .toDate()
-                          .toLocaleString()
-                      : "-"}
-                  </td>
-
-                </tr>
-
-              ))}
-
-            </tbody>
-
-          </table>
-
-        </div>
-
-      )}
-
-    </div>
+    </main>
   );
 }
