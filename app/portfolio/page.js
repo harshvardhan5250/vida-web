@@ -1,47 +1,55 @@
+"use client";
+
 import Link from "next/link";
 
 const projects = [
   {
     number: "01",
-    title: "Business Website",
-    category: "Business",
+    title: "Urban Cafe",
+    category: "Restaurant Website",
     description:
-      "A modern professional website designed to help a local business build its online presence.",
+      "A modern restaurant website with menu presentation, location information and online enquiry flow.",
+    tags: ["Business", "Responsive", "Modern UI"],
   },
   {
     number: "02",
-    title: "E-Commerce Store",
-    category: "E-Commerce",
+    title: "Nova Fitness",
+    category: "Fitness Website",
     description:
-      "A clean online store interface with products, categories and a smooth shopping experience.",
+      "A bold fitness website designed to showcase services, programs, trainers and membership information.",
+    tags: ["Fitness", "Landing Page", "UI Design"],
   },
   {
     number: "03",
-    title: "Personal Portfolio",
-    category: "Portfolio",
+    title: "Apex Studio",
+    category: "Creative Portfolio",
     description:
-      "A professional portfolio website for showcasing skills, projects and achievements.",
+      "A minimal portfolio experience for a creative studio with strong visual hierarchy and project presentation.",
+    tags: ["Portfolio", "Creative", "Minimal"],
   },
   {
     number: "04",
-    title: "Restaurant Website",
-    category: "Business",
+    title: "TechFlow",
+    category: "Startup Website",
     description:
-      "A modern restaurant website with menu, location, contact information and online presence.",
+      "A professional startup website focused on presenting the product, features and business value clearly.",
+    tags: ["Startup", "SaaS", "Responsive"],
   },
   {
     number: "05",
-    title: "Startup Landing Page",
-    category: "Startup",
+    title: "Luxe Estate",
+    category: "Real Estate Website",
     description:
-      "A conversion-focused landing page designed for a growing startup or new product.",
+      "A premium real estate interface for showcasing properties, services and customer enquiries.",
+    tags: ["Real Estate", "Premium", "Business"],
   },
   {
     number: "06",
-    title: "Custom Web Application",
-    category: "Web App",
+    title: "Creator Hub",
+    category: "Personal Brand",
     description:
-      "A custom web application interface built around specific business requirements.",
+      "A personal brand website designed for creators to showcase their work, services and online presence.",
+    tags: ["Creator", "Personal Brand", "Modern"],
   },
 ];
 
@@ -58,14 +66,15 @@ export default function PortfolioPage() {
         </p>
 
         <h1>
-          Projects we've
+          Websites that
           <br />
-          <span>built.</span>
+          <span>make an impression.</span>
         </h1>
 
-        <p>
-          A selection of websites and digital experiences
-          designed and developed by VIDA WEB.
+        <p className="portfolioHeroText">
+          Explore some of the digital experiences
+          created by VIDA WEB for businesses,
+          startups, creators and brands.
         </p>
 
       </section>
@@ -73,51 +82,185 @@ export default function PortfolioPage() {
 
       {/* PROJECTS */}
 
-      <section className="portfolioList">
+      <section className="portfolioSection">
+
+        <div className="portfolioSectionHeader">
+
+          <div>
+            <p className="sectionLabel">
+              SELECTED PROJECTS
+            </p>
+
+            <h2>
+              Built with purpose.
+            </h2>
+          </div>
+
+          <p>
+            Every website is designed around the
+            client&apos;s brand, audience and goals.
+          </p>
+
+        </div>
+
 
         <div className="portfolioGrid">
 
           {projects.map((project) => (
-            <div
+            <article
               className="portfolioCard"
               key={project.number}
             >
 
-              <div className="portfolioImage">
+              {/* PROJECT VISUAL */}
 
-                <span className="projectNumber">
+              <div className="portfolioVisual">
+
+                <span className="portfolioNumber">
                   {project.number}
                 </span>
 
-                <span className="projectCategory">
-                  {project.category}
-                </span>
+                <div className="portfolioMockup">
 
-                <div className="projectMockup">
-                  <span>VIDA WEB</span>
+                  <div className="mockupTop">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+
+                  <div className="mockupContent">
+
+                    <div className="mockupLine large"></div>
+
+                    <div className="mockupLine"></div>
+
+                    <div className="mockupLine short"></div>
+
+                    <div className="mockupBlocks">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </div>
+
+                  </div>
+
                 </div>
 
               </div>
 
 
-              <div className="portfolioContent">
+              {/* PROJECT INFO */}
 
-                <h2>
+              <div className="portfolioCardContent">
+
+                <span className="portfolioCategory">
+                  {project.category}
+                </span>
+
+                <h3>
                   {project.title}
-                </h2>
+                </h3>
 
                 <p>
                   {project.description}
                 </p>
 
-                <Link href="/contact">
-                  View Project →
-                </Link>
+
+                <div className="portfolioTags">
+
+                  {project.tags.map((tag) => (
+                    <span key={tag}>
+                      {tag}
+                    </span>
+                  ))}
+
+                </div>
 
               </div>
 
-            </div>
+            </article>
           ))}
+
+        </div>
+
+      </section>
+
+
+      {/* PROCESS */}
+
+      <section className="portfolioProcess">
+
+        <div className="portfolioProcessHeader">
+
+          <p className="sectionLabel">
+            OUR APPROACH
+          </p>
+
+          <h2>
+            From idea to
+            <br />
+            <span>digital experience.</span>
+          </h2>
+
+        </div>
+
+
+        <div className="processGrid">
+
+          <div className="processItem">
+            <span>01</span>
+
+            <h3>
+              Discover
+            </h3>
+
+            <p>
+              We understand your business,
+              audience and project requirements.
+            </p>
+          </div>
+
+
+          <div className="processItem">
+            <span>02</span>
+
+            <h3>
+              Design
+            </h3>
+
+            <p>
+              We create a clean and modern
+              interface around your brand.
+            </p>
+          </div>
+
+
+          <div className="processItem">
+            <span>03</span>
+
+            <h3>
+              Develop
+            </h3>
+
+            <p>
+              Your design is transformed into
+              a fast and responsive website.
+            </p>
+          </div>
+
+
+          <div className="processItem">
+            <span>04</span>
+
+            <h3>
+              Launch
+            </h3>
+
+            <p>
+              After testing and review, your
+              website goes live.
+            </p>
+          </div>
 
         </div>
 
@@ -133,20 +276,21 @@ export default function PortfolioPage() {
         </p>
 
         <h2>
-          Your project could
-          <span> be next.</span>
+          Your website could
+          <br />
+          be next.
         </h2>
 
         <p>
           Tell us what you want to build and
-          let's create something great together.
+          let&apos;s turn your idea into reality.
         </p>
 
         <Link
-          href="/signup"
-          className="primaryButton"
+          href="/dashboard/new-project"
+          className="dashboardButton"
         >
-          Start Your Project →
+          Start a Project →
         </Link>
 
       </section>

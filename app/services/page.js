@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 
 const services = [
@@ -5,29 +7,78 @@ const services = [
     number: "01",
     title: "Business Websites",
     description:
-      "Professional websites for businesses that want a strong online presence and more customers.",
-    price: "Starting ₹15,000",
+      "Professional websites designed to establish your business online and turn visitors into customers.",
+    features: [
+      "Modern UI",
+      "Mobile Responsive",
+      "Contact Forms",
+      "SEO Friendly",
+    ],
   },
+
   {
     number: "02",
-    title: "E-Commerce Websites",
+    title: "Landing Pages",
     description:
-      "Online stores with products, categories, customer accounts and payment integration.",
-    price: "Starting ₹25,000",
+      "High-converting landing pages for products, campaigns, services and marketing initiatives.",
+    features: [
+      "Conversion Focused",
+      "Fast Loading",
+      "Responsive Design",
+      "CTA Integration",
+    ],
   },
+
   {
     number: "03",
-    title: "Portfolio Websites",
+    title: "E-Commerce",
     description:
-      "Modern portfolio websites for creators, students, freelancers and professionals.",
-    price: "Starting ₹15,000",
+      "Online stores that help businesses showcase products and manage their digital sales presence.",
+    features: [
+      "Product Pages",
+      "Shopping Flow",
+      "Payment Integration",
+      "Order Management",
+    ],
   },
+
   {
     number: "04",
-    title: "Custom Web Applications",
+    title: "Portfolio Websites",
     description:
-      "Custom web applications designed around your specific business requirements.",
-    price: "Starting ₹30,000",
+      "Personal and professional portfolios that showcase your work, skills and achievements.",
+    features: [
+      "Project Showcase",
+      "Personal Branding",
+      "Responsive Design",
+      "Contact Section",
+    ],
+  },
+
+  {
+    number: "05",
+    title: "Custom Web Apps",
+    description:
+      "Custom web applications built around your specific business requirements and workflow.",
+    features: [
+      "Custom Features",
+      "Database Integration",
+      "Authentication",
+      "Dashboard",
+    ],
+  },
+
+  {
+    number: "06",
+    title: "Website Redesign",
+    description:
+      "Transform an outdated website into a modern, responsive and easier-to-use digital experience.",
+    features: [
+      "Modern UI",
+      "UX Improvements",
+      "Performance",
+      "Mobile Optimization",
+    ],
   },
 ];
 
@@ -35,24 +86,24 @@ export default function ServicesPage() {
   return (
     <div className="servicesPage">
 
-      {/* HEADER */}
+      {/* HERO */}
 
       <section className="servicesHero">
 
         <p className="sectionLabel">
-          OUR SERVICES
+          WHAT WE DO
         </p>
 
         <h1>
-          We build websites
+          Digital solutions
           <br />
-          <span>that work.</span>
+          <span>built for your goals.</span>
         </h1>
 
-        <p className="servicesIntro">
-          From simple business websites to complete web
-          applications, we build digital products according
-          to your requirements.
+        <p className="servicesHeroText">
+          From simple business websites to custom web
+          applications, VIDA WEB helps businesses,
+          creators and startups build their digital presence.
         </p>
 
       </section>
@@ -60,41 +111,258 @@ export default function ServicesPage() {
 
       {/* SERVICES */}
 
-      <section className="servicesList">
+      <section className="servicesSection">
+
+        <div className="servicesSectionHeader">
+
+          <div>
+
+            <p className="sectionLabel">
+              OUR SERVICES
+            </p>
+
+            <h2>
+              Everything you need
+              <br />
+              to get online.
+            </h2>
+
+          </div>
+
+          <p>
+            We combine design, development and
+            technology to create websites that are
+            functional, responsive and easy to use.
+          </p>
+
+        </div>
+
 
         <div className="servicesGrid">
 
           {services.map((service) => (
-            <div
+
+            <article
               className="serviceCard"
               key={service.number}
             >
 
-              <div className="serviceTop">
-                <span>{service.number}</span>
-                <span>↗</span>
+              <div className="serviceCardTop">
+
+                <span className="serviceNumber">
+                  {service.number}
+                </span>
+
+                <span className="serviceArrow">
+                  ↗
+                </span>
+
               </div>
 
-              <h2>{service.title}</h2>
 
-              <p>
+              <h3>
+                {service.title}
+              </h3>
+
+
+              <p className="serviceDescription">
                 {service.description}
               </p>
 
-              <div className="serviceBottom">
 
-                <strong>
-                  {service.price}
-                </strong>
+              <div className="serviceFeatures">
 
-                <Link href="/signup">
-                  Start Project →
-                </Link>
+                {service.features.map(
+                  (feature) => (
+                    <span key={feature}>
+                      {feature}
+                    </span>
+                  )
+                )}
 
               </div>
 
-            </div>
+            </article>
+
           ))}
+
+        </div>
+
+      </section>
+
+
+      {/* WHY VIDA WEB */}
+
+      <section className="whyServices">
+
+        <div className="whyServicesHeader">
+
+          <p className="sectionLabel">
+            WHY VIDA WEB
+          </p>
+
+          <h2>
+            More than just
+            <br />
+            <span>a website.</span>
+          </h2>
+
+        </div>
+
+
+        <div className="whyServicesGrid">
+
+          <div className="whyServiceItem">
+
+            <span>01</span>
+
+            <h3>
+              Modern Design
+            </h3>
+
+            <p>
+              Clean interfaces designed around
+              your brand and audience.
+            </p>
+
+          </div>
+
+
+          <div className="whyServiceItem">
+
+            <span>02</span>
+
+            <h3>
+              Responsive
+            </h3>
+
+            <p>
+              Your website works smoothly across
+              phones, tablets and desktops.
+            </p>
+
+          </div>
+
+
+          <div className="whyServiceItem">
+
+            <span>03</span>
+
+            <h3>
+              Performance
+            </h3>
+
+            <p>
+              We focus on clean implementation
+              and a fast user experience.
+            </p>
+
+          </div>
+
+
+          <div className="whyServiceItem">
+
+            <span>04</span>
+
+            <h3>
+              Client Focused
+            </h3>
+
+            <p>
+              Your requirements guide the design
+              and development process.
+            </p>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      {/* PROCESS */}
+
+      <section className="servicesProcess">
+
+        <div className="servicesProcessHeader">
+
+          <p className="sectionLabel">
+            HOW IT WORKS
+          </p>
+
+          <h2>
+            From idea to
+            <br />
+            <span>launch.</span>
+          </h2>
+
+        </div>
+
+
+        <div className="servicesProcessGrid">
+
+          <div className="servicesProcessItem">
+
+            <span>01</span>
+
+            <h3>
+              Tell Us
+            </h3>
+
+            <p>
+              Share your business idea,
+              requirements and goals.
+            </p>
+
+          </div>
+
+
+          <div className="servicesProcessItem">
+
+            <span>02</span>
+
+            <h3>
+              We Design
+            </h3>
+
+            <p>
+              We create a visual direction
+              for your website.
+            </p>
+
+          </div>
+
+
+          <div className="servicesProcessItem">
+
+            <span>03</span>
+
+            <h3>
+              We Build
+            </h3>
+
+            <p>
+              Your website is developed,
+              tested and optimized.
+            </p>
+
+          </div>
+
+
+          <div className="servicesProcessItem">
+
+            <span>04</span>
+
+            <h3>
+              You Launch
+            </h3>
+
+            <p>
+              After review and approval,
+              your website goes live.
+            </p>
+
+          </div>
 
         </div>
 
@@ -106,25 +374,37 @@ export default function ServicesPage() {
       <section className="servicesCTA">
 
         <p className="sectionLabel">
-          HAVE SOMETHING ELSE IN MIND?
+          HAVE A PROJECT?
         </p>
 
         <h2>
-          Tell us what you
-          <span> want to build.</span>
+          Let&apos;s build
+          <br />
+          something valuable.
         </h2>
 
         <p>
-          Don't see exactly what you need?
-          Contact us and we'll discuss your requirements.
+          Tell us what you&apos;re looking to build
+          and we&apos;ll help you find the right solution.
         </p>
 
-        <Link
-          href="/contact"
-          className="primaryButton"
-        >
-          Contact Us →
-        </Link>
+        <div className="servicesCTAButtons">
+
+          <Link
+            href="/dashboard/new-project"
+            className="dashboardButton"
+          >
+            Start a Project →
+          </Link>
+
+          <Link
+            href="/pricing"
+            className="secondaryButton"
+          >
+            View Pricing
+          </Link>
+
+        </div>
 
       </section>
 

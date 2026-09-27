@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { onAuthStateChanged } from "firebase/auth";
 
 import { auth } from "../../lib/firebase";
@@ -14,12 +14,13 @@ export default function AdminPage() {
     const unsubscribe = onAuthStateChanged(
       auth,
       (currentUser) => {
-        if (currentUser) {
-          setUser(currentUser);
-        } else {
+
+        if (!currentUser) {
           window.location.href = "/login";
+          return;
         }
 
+        setUser(currentUser);
         setLoading(false);
       }
     );
@@ -29,166 +30,111 @@ export default function AdminPage() {
 
   if (loading) {
     return (
-      <div className="dashboardPage">
-        <div className="customersMessage">
-          Loading admin panel...
-        </div>
+      <div className="adminPage">
+        <p>Loading admin panel...</p>
       </div>
     );
   }
 
-  if (!user) {
-    return null;
-  }
-
   return (
-    <div className="dashboardPage">
+    <div className="adminPage">
 
-      {/* ADMIN HEADER */}
-
-      <section className="dashboardHero">
+      <div className="adminHeader">
 
         <p className="sectionLabel">
-          VIDA WEB ADMIN
+          VIDA WEB
         </p>
 
-        <h1>
-          Admin
-          <br />
-          <span>Dashboard.</span>
-        </h1>
+        <h1>Admin Dashboard</h1>
 
         <p>
-          Manage customers, projects, messages
-          and payments from one place.
+          Manage customers, projects,
+          payments and messages.
         </p>
 
-      </section>
+        {user && (
+          <p className="adminEmail">
+            Logged in as: {user.email}
+          </p>
+        )}
 
+      </div>
 
-      {/* ADMIN OPTIONS */}
-
-      <section className="dashboardGrid">
-
-        {/* CUSTOMERS */}
+      <div className="adminGrid">
 
         <Link
           href="/admin/customers"
-          className="dashboardCard"
+          className="adminCard"
         >
-
           <span>01</span>
 
-          <h2>
-            Customers
-          </h2>
+          <h2>Customers</h2>
 
           <p>
-            View registered customers,
-            their email and account details.
+            View all registered customers
+            and their account information.
           </p>
 
+          <strong>
+            View Customers →
+          </strong>
         </Link>
-
-
-        {/* MESSAGES */}
-
-        <Link
-          href="/admin/messages"
-          className="dashboardCard"
-        >
-
-          <span>02</span>
-
-          <h2>
-            Messages
-          </h2>
-
-          <p>
-            View enquiries and messages
-            received from customers.
-          </p>
-
-        </Link>
-
-
-        {/* PAYMENTS */}
-
-        <Link
-          href="/admin/payments"
-          className="dashboardCard"
-        >
-
-          <span>03</span>
-
-          <h2>
-            Payments
-          </h2>
-
-          <p>
-            View customer payments,
-            transactions and payment status.
-          </p>
-
-        </Link>
-
-
-        {/* PROJECTS */}
 
         <Link
           href="/admin/projects"
-          className="dashboardCard"
+          className="adminCard"
         >
+          <span>02</span>
 
-          <span>04</span>
-
-          <h2>
-            Projects
-          </h2>
+          <h2>Projects</h2>
 
           <p>
-            Manage website projects,
-            development and delivery status.
+            Manage customer website
+            projects and their status.
           </p>
 
+          <strong>
+            View Projects →
+          </strong>
         </Link>
 
-      </section>
-
-
-      {/* ACCOUNT INFO */}
-
-      <section
-        style={{
-          maxWidth: "1200px",
-          margin: "40px auto 0",
-          padding: "25px",
-          background: "#0d0d0d",
-          border: "1px solid #222",
-          borderRadius: "14px",
-        }}
-      >
-
-        <p
-          style={{
-            color: "#777",
-            fontSize: "13px",
-            marginBottom: "8px",
-          }}
+        <Link
+          href="/admin/payments"
+          className="adminCard"
         >
-          ADMIN ACCOUNT
-        </p>
+          <span>03</span>
 
-        <p
-          style={{
-            color: "#fff",
-            fontSize: "14px",
-          }}
+          <h2>Payments</h2>
+
+          <p>
+            Track payments, amounts and
+            transaction status.
+          </p>
+
+          <strong>
+            View Payments →
+          </strong>
+        </Link>
+
+        <Link
+          href="/admin/messages"
+          className="adminCard"
         >
-          {user.email}
-        </p>
+          <span>04</span>
 
-      </section>
+          <h2>Messages</h2>
+
+          <p>
+            Read messages sent by
+            customers.
+          </p>
+
+          <strong>
+            View Messages →
+          </strong>
+        </Link>
+
+      </div>
 
     </div>
   );

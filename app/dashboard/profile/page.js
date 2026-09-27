@@ -1,16 +1,26 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
-import { onAuthStateChanged } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import { onAuthStateChanged, updateProfile } from "firebase/auth";
+import {
+  doc,
+  getDoc,
+  updateDoc,
+} from "firebase/firestore";
 
 import { auth, db } from "../../../lib/firebase";
 
 export default function ProfilePage() {
   const [user, setUser] = useState(null);
-  const [profile, setProfile] = useState(null);
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+
+  const [success, setSuccess] = useState("");
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(
@@ -22,6 +32,7 @@ export default function ProfilePage() {
         }
 
         setUser(currentUser);
+        setEmail(currentUser.email || "");
 
         try {
           const userRef = doc(
@@ -30,15 +41,29 @@ export default function ProfilePage() {
             currentUser.uid
           );
 
-          const snapshot = await getDoc(userRef);
+          const userSnap = await getDoc(userRef);
 
-          if (snapshot.exists()) {
-            setProfile(snapshot.data());
+          if (userSnap.exists()) {
+            const data = userSnap.data();
+
+            setName(
+              data.name ||
+                currentUser.displayName ||
+                ""
+            );
+          } else {
+            setName(
+              currentUser.displayName || ""
+            );
           }
-        } catch (error) {
+        } catch (err) {
           console.error(
-            "Profile error:",
-            error
+            "Profile loading error:",
+            err
+          );
+
+          setError(
+            "Unable to load profile."
           );
         } finally {
           setLoading(false);
@@ -49,195 +74,216 @@ export default function ProfilePage() {
     return () => unsubscribe();
   }, []);
 
+  const handleSave = async (e) => {
+    e.preventDefault();
+
+    if (!user) return;
+
+    setSaving(true);
+    setSuccess("");
+    setError("");
+
+    try {
+      const cleanName = name.trim();
+
+      if (!cleanName) {
+        throw new Error(
+          "Please enter your name."
+        );
+      }
+
+      // Firebase Authentication profile
+      await updateProfile(user, {
+        displayName: cleanName,
+      });
+
+      // Firestore profile
+      const userRef = doc(
+        db,
+        "users",
+        user.uid
+      );
+
+      await updateDoc(userRef, {
+        name: cleanName,
+      });
+
+      setSuccess(
+        "Profile updated successfully."
+      );
+
+    } catch (err) {
+      console.error(
+        "Profile update error:",
+        err
+      );
+
+      setError(
+        err.message ||
+          "Unable to update profile."
+      );
+    } finally {
+      setSaving(false);
+    }
+  };
+
   if (loading) {
     return (
-      <div className="authPage">
-        <div className="customersMessage">
-          Loading profile...
+      <div className="dashboardPage">
+        <div className="dashboardEmpty">
+          <p>Loading profile...</p>
         </div>
       </div>
     );
   }
-
-  if (!user) {
-    return null;
-  }
-
-  const name =
-    profile?.name ||
-    user.displayName ||
-    "Customer";
 
   return (
     <div className="dashboardPage">
 
       {/* HEADER */}
 
-      <section className="dashboardHero">
+      <div className="dashboardHeader">
 
-        <p className="sectionLabel">
-          CLIENT PROFILE
-        </p>
+        <div>
+          <p className="sectionLabel">
+            MY ACCOUNT
+          </p>
 
-        <h1>
-          Your
-          <br />
-          <span>Profile.</span>
-        </h1>
+          <h1>
+            My Profile
+          </h1>
 
-        <p>
-          Manage your VIDA WEB account information.
-        </p>
-
-      </section>
-
-
-      {/* PROFILE CARD */}
-
-      <section
-        style={{
-          maxWidth: "700px",
-          margin: "0 auto",
-          padding: "35px",
-          background: "#0d0d0d",
-          border: "1px solid #222",
-          borderRadius: "16px",
-        }}
-      >
-
-        {/* AVATAR */}
-
-        <div
-          style={{
-            width: "70px",
-            height: "70px",
-            borderRadius: "50%",
-            background: "#7c5cff",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: "26px",
-            fontWeight: "700",
-            marginBottom: "30px",
-          }}
-        >
-          {name
-            .charAt(0)
-            .toUpperCase()}
+          <p>
+            Manage your VIDA WEB account information.
+          </p>
         </div>
 
+      </div>
 
-        {/* NAME */}
 
-        <div
-          style={{
-            padding: "18px 0",
-            borderBottom: "1px solid #222",
-          }}
-        >
+      {/* PROFILE */}
 
-          <p
-            style={{
-              color: "#777",
-              fontSize: "12px",
-              marginBottom: "7px",
-              textTransform: "uppercase",
-            }}
-          >
-            Full Name
+      <div className="profileLayout">
+
+        <div className="profileCard">
+
+          <div className="profileAvatar">
+            {name
+              ? name
+                  .charAt(0)
+                  .toUpperCase()
+              : "U"}
+          </div>
+
+          <h2>
+            {name || "User"}
+          </h2>
+
+          <p>
+            {email}
           </p>
 
-          <p
-            style={{
-              color: "#fff",
-              fontSize: "16px",
-            }}
-          >
-            {name}
-          </p>
+          <span className="statusBadge">
+            Customer
+          </span>
 
         </div>
 
 
-        {/* EMAIL */}
+        {/* FORM */}
 
-        <div
-          style={{
-            padding: "18px 0",
-            borderBottom: "1px solid #222",
-          }}
-        >
+        <div className="profileFormWrapper">
 
-          <p
-            style={{
-              color: "#777",
-              fontSize: "12px",
-              marginBottom: "7px",
-              textTransform: "uppercase",
-            }}
+          <form
+            className="dashboardForm"
+            onSubmit={handleSave}
           >
-            Email
-          </p>
 
-          <p
-            style={{
-              color: "#fff",
-              fontSize: "16px",
-              wordBreak: "break-word",
-            }}
-          >
-            {user.email}
-          </p>
+            <div className="formGroup">
+
+              <label htmlFor="name">
+                Full Name
+              </label>
+
+              <input
+                id="name"
+                type="text"
+                value={name}
+                onChange={(e) =>
+                  setName(e.target.value)
+                }
+                placeholder="Enter your full name"
+                required
+              />
+
+            </div>
+
+
+            <div className="formGroup">
+
+              <label htmlFor="email">
+                Email Address
+              </label>
+
+              <input
+                id="email"
+                type="email"
+                value={email}
+                disabled
+              />
+
+              <small>
+                Your email address is managed by
+                Firebase Authentication.
+              </small>
+
+            </div>
+
+
+            <div className="formGroup">
+
+              <label>
+                Customer ID
+              </label>
+
+              <input
+                type="text"
+                value={user?.uid || ""}
+                disabled
+              />
+
+            </div>
+
+
+            {success && (
+              <div className="contactSuccess">
+                {success}
+              </div>
+            )}
+
+
+            {error && (
+              <div className="contactError">
+                {error}
+              </div>
+            )}
+
+
+            <button
+              type="submit"
+              className="dashboardButton"
+              disabled={saving}
+            >
+              {saving
+                ? "Saving..."
+                : "Save Changes →"}
+            </button>
+
+          </form>
 
         </div>
 
-
-        {/* USER ID */}
-
-        <div
-          style={{
-            padding: "18px 0",
-          }}
-        >
-
-          <p
-            style={{
-              color: "#777",
-              fontSize: "12px",
-              marginBottom: "7px",
-              textTransform: "uppercase",
-            }}
-          >
-            User ID
-          </p>
-
-          <p
-            style={{
-              color: "#aaa",
-              fontSize: "13px",
-              fontFamily: "monospace",
-              wordBreak: "break-all",
-            }}
-          >
-            {user.uid}
-          </p>
-
-        </div>
-
-
-        {/* BACK BUTTON */}
-
-        <Link
-          href="/dashboard"
-          className="primaryButton"
-          style={{
-            marginTop: "20px",
-          }}
-        >
-          ← Back to Dashboard
-        </Link>
-
-      </section>
+      </div>
 
     </div>
   );

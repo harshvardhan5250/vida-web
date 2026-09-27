@@ -1,47 +1,60 @@
+"use client";
+
 import Link from "next/link";
 
 const plans = [
   {
     name: "Starter",
     price: "₹15,000",
-    description: "For individuals and small businesses starting online.",
+    description:
+      "For individuals and small businesses that need a clean professional website.",
     features: [
       "Up to 5 Pages",
       "Responsive Design",
+      "Modern UI Design",
       "Contact Form",
-      "Basic SEO",
+      "Basic SEO Setup",
       "Mobile Friendly",
-      "7 Days Support",
+      "Deployment Support",
     ],
+    popular: false,
   },
+
   {
-    name: "Business",
+    name: "Professional",
     price: "₹20,000",
-    description: "For businesses that need a complete professional website.",
-    popular: true,
+    description:
+      "For growing businesses that need a stronger online presence.",
     features: [
-      "Up to 10 Pages",
+      "Up to 8 Pages",
+      "Premium UI Design",
       "Responsive Design",
-      "Contact Form",
-      "Basic SEO",
-      "WhatsApp Integration",
-      "Google Maps",
-      "30 Days Support",
+      "Contact & Enquiry Forms",
+      "Basic SEO Setup",
+      "Performance Optimization",
+      "Social Media Integration",
+      "Deployment Support",
     ],
+    popular: true,
   },
+
   {
-    name: "Custom",
-    price: "₹30,000+",
-    description: "For advanced websites and custom web applications.",
+    name: "Premium",
+    price: "₹30,000",
+    description:
+      "For brands that need a complete and more advanced website experience.",
     features: [
-      "Custom UI/UX",
-      "Advanced Features",
-      "Database Integration",
-      "User Authentication",
-      "Admin Dashboard",
-      "Payment Integration",
-      "Custom Support",
+      "Up to 12 Pages",
+      "Premium Custom UI",
+      "Responsive Design",
+      "Advanced Animations",
+      "Forms & Integrations",
+      "SEO Setup",
+      "Performance Optimization",
+      "Analytics Integration",
+      "Deployment Support",
     ],
+    popular: false,
   },
 ];
 
@@ -49,23 +62,23 @@ export default function PricingPage() {
   return (
     <div className="pricingPage">
 
-      {/* HEADER */}
+      {/* HERO */}
 
       <section className="pricingHero">
 
         <p className="sectionLabel">
-          SIMPLE & TRANSPARENT
+          SIMPLE PRICING
         </p>
 
         <h1>
           Choose the right
           <br />
-          <span>package for you.</span>
+          <span>website for you.</span>
         </h1>
 
-        <p>
-          Start with a package or tell us what you need.
-          We'll build a solution around your requirements.
+        <p className="pricingHeroText">
+          Transparent packages designed for businesses,
+          creators and startups. No complicated pricing.
         </p>
 
       </section>
@@ -73,17 +86,21 @@ export default function PricingPage() {
 
       {/* PRICING CARDS */}
 
-      <section className="pricingCardsSection">
+      <section className="pricingSection">
 
-        <div className="pricingCards">
+        <div className="pricingGrid">
 
           {plans.map((plan) => (
             <div
               className={`pricingCard ${
-                plan.popular ? "popularPlan" : ""
+                plan.popular
+                  ? "pricingFeatured"
+                  : ""
               }`}
               key={plan.name}
             >
+
+              {/* POPULAR */}
 
               {plan.popular && (
                 <div className="popularBadge">
@@ -91,35 +108,53 @@ export default function PricingPage() {
                 </div>
               )}
 
+
+              {/* PLAN HEADER */}
+
               <div className="pricingCardHeader">
-                <p>{plan.name}</p>
 
-                <h2>{plan.price}</h2>
+                <p className="pricingPlanName">
+                  {plan.name}
+                </p>
 
-                <span>
+                <h2>
+                  {plan.price}
+                </h2>
+
+                <p>
                   {plan.description}
-                </span>
+                </p>
+
               </div>
+
+
+              {/* FEATURES */}
 
               <div className="pricingFeatures">
 
                 {plan.features.map((feature) => (
                   <div
-                    className="feature"
+                    className="pricingFeature"
                     key={feature}
                   >
                     <span>✓</span>
-                    {feature}
+
+                    <p>
+                      {feature}
+                    </p>
                   </div>
                 ))}
 
               </div>
 
+
+              {/* BUTTON */}
+
               <Link
-                href="/signup"
+                href="/dashboard/new-project"
                 className="pricingButton"
               >
-                Start Project →
+                Get Started →
               </Link>
 
             </div>
@@ -130,29 +165,151 @@ export default function PricingPage() {
       </section>
 
 
-      {/* CUSTOM CTA */}
+      {/* CUSTOM PLAN */}
+
+      <section className="customPricing">
+
+        <div className="customPricingContent">
+
+          <div>
+
+            <p className="sectionLabel">
+              NEED SOMETHING DIFFERENT?
+            </p>
+
+            <h2>
+              Build a custom
+              <br />
+              solution.
+            </h2>
+
+            <p>
+              Need e-commerce, dashboards, custom
+              functionality or a larger website?
+              Tell us what you need and we&apos;ll
+              create a custom proposal.
+            </p>
+
+          </div>
+
+
+          <Link
+            href="/contact"
+            className="dashboardButton"
+          >
+            Discuss Your Project →
+          </Link>
+
+        </div>
+
+      </section>
+
+
+      {/* FAQ */}
+
+      <section className="pricingFAQ">
+
+        <div className="pricingFAQHeader">
+
+          <p className="sectionLabel">
+            FAQ
+          </p>
+
+          <h2>
+            Frequently asked questions.
+          </h2>
+
+        </div>
+
+
+        <div className="faqGrid">
+
+          <div className="faqItem">
+
+            <h3>
+              Is hosting included?
+            </h3>
+
+            <p>
+              Hosting and domain costs can vary
+              depending on your requirements. We can
+              help you set everything up.
+            </p>
+
+          </div>
+
+
+          <div className="faqItem">
+
+            <h3>
+              Can I request changes?
+            </h3>
+
+            <p>
+              Yes. Project revisions can be discussed
+              during the design and review stages.
+            </p>
+
+          </div>
+
+
+          <div className="faqItem">
+
+            <h3>
+              Can you build an e-commerce website?
+            </h3>
+
+            <p>
+              Yes. E-commerce and advanced
+              functionality can be handled through
+              a custom project.
+            </p>
+
+          </div>
+
+
+          <div className="faqItem">
+
+            <h3>
+              How do I start?
+            </h3>
+
+            <p>
+              Create an account, submit your project
+              requirements and our team will contact you.
+            </p>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      {/* CTA */}
 
       <section className="pricingCTA">
 
         <p className="sectionLabel">
-          NOT SURE WHAT YOU NEED?
+          READY TO START?
         </p>
 
         <h2>
-          Let's discuss your
-          <span> project.</span>
+          Let&apos;s build your
+          <br />
+          website.
         </h2>
 
         <p>
-          Tell us your idea, requirements and budget.
-          We'll suggest the right solution for you.
+          Choose a package or tell us about your
+          custom requirements.
         </p>
 
         <Link
-          href="/contact"
-          className="primaryButton"
+          href="/dashboard/new-project"
+          className="dashboardButton"
         >
-          Talk to Us →
+          Start Your Project →
         </Link>
 
       </section>

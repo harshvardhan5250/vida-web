@@ -5,7 +5,7 @@ import Link from "next/link";
 import { onAuthStateChanged } from "firebase/auth";
 import {
   collection,
-  getDocs,
+  onSnapshot,
   query,
   where,
   orderBy,
@@ -13,361 +13,215 @@ import {
 
 import { auth, db } from "../../../lib/firebase";
 
-export default function DashboardProjectsPage() {
-  const [user, setUser] = useState(null);
+export default function ProjectsPage() {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
 
   useEffect(() => {
-    let mounted = true;
+    let unsubscribeProjects = null;
 
-    const unsubscribe = onAuthStateChanged(
+    const unsubscribeAuth = onAuthStateChanged(
       auth,
-      async (currentUser) => {
-        if (!currentUser) {
+      (user) => {
+        if (!user) {
           window.location.href = "/login";
           return;
         }
 
-        setUser(currentUser);
+        const projectsQuery = query(
+          collection(db, "projects"),
+          where("customerId", "==", user.uid),
+          orderBy("createdAt", "desc")
+        );
 
-        try {
-          const projectsRef = collection(
-            db,
-            "projects"
-          );
-
-          const projectsQuery = query(
-            projectsRef,
-            where(
-              "customerId",
-              "==",
-              currentUser.uid
-            ),
-            orderBy("createdAt", "desc")
-          );
-
-          const snapshot =
-            await getDocs(projectsQuery);
-
-          const data = snapshot.docs.map(
-            (doc) => ({
-              id: doc.id,
-              ...doc.data(),
-            })
-          );
-
-          if (mounted) {
-            setProjects(data);
-          }
-        } catch (err) {
-          console.error(
-            "Projects error:",
-            err
-          );
-
-          if (mounted) {
-            setError(
-              "Unable to load your projects."
+        unsubscribeProjects = onSnapshot(
+          projectsQuery,
+          (snapshot) => {
+            const projectData = snapshot.docs.map(
+              (doc) => ({
+                id: doc.id,
+                ...doc.data(),
+              })
             );
-          }
-        } finally {
-          if (mounted) {
+
+            setProjects(projectData);
+            setLoading(false);
+          },
+          (error) => {
+            console.error("Projects error:", error);
             setLoading(false);
           }
-        }
+        );
       }
     );
 
     return () => {
-      mounted = false;
-      unsubscribe();
+      unsubscribeAuth();
+
+      if (unsubscribeProjects) {
+        unsubscribeProjects();
+      }
     };
   }, []);
 
-  const formatDate = (date) => {
-    if (!date) return "N/A";
-
-    try {
-      if (
-        typeof date.toDate === "function"
-      ) {
-        return date
-          .toDate()
-          .toLocaleDateString("en-IN");
-      }
-
-      return new Date(
-        date
-      ).toLocaleDateString("en-IN");
-    } catch {
-      return "N/A";
-    }
-  };
-
-  const getStatusClass = (status) => {
-    if (status === "completed") {
-      return "#6ee7b7";
-    }
-
-    if (status === "in-progress") {
-      return "#facc15";
-    }
-
-    return "#aaa";
-  };
-
-  if (!user) {
-    return (
-      <div className="authPage">
-        <div className="customersMessage">
-          Loading projects...
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="adminCustomersPage">
+    <div className="dashboardPage">
 
-      {/* HEADER */}
-
-      <div className="customersHeader">
+      <div className="dashboardHeader">
 
         <div>
-
           <p className="sectionLabel">
-            CLIENT DASHBOARD
+            MY ACCOUNT
           </p>
 
-          <h1>
-            My Projects
-          </h1>
+          <h1>My Projects</h1>
 
-          <p className="customersSubtitle">
-            Track your website projects,
-            packages and development status.
+          <p>
+            Track all your VIDA WEB projects from one place.
           </p>
-
         </div>
 
         <Link
-          href="/dashboard"
-          className="backButton"
+          href="/dashboard/new-projects"
+          className="dashboardButton"
         >
-          ← Dashboard
+          + New Project
         </Link>
 
       </div>
 
 
-      {/* STATS */}
+      {loading ? (
+        <div className="dashboardEmpty">
+          <p>Loading projects...</p>
+        </div>
+      ) : projects.length === 0 ? (
+        <div className="dashboardEmpty">
 
-      <div className="customerStats">
+          <h2>No projects yet</h2>
 
-        <div className="customerStatCard">
+          <p>
+            You haven&apos;t started any project with VIDA WEB.
+          </p>
 
-          <span>
-            TOTAL PROJECTS
-          </span>
-
-          <strong>
-            {projects.length}
-          </strong>
+          <Link
+            href="/dashboard/new-projects"
+            className="dashboardButton"
+          >
+            Start Your First Project →
+          </Link>
 
         </div>
+      ) : (
+
+        <div className="projectGrid">
+
+          {projects.map((project) => (
+
+            <div
+              className="projectCard"
+              key={project.id}
+            >
+
+              <div className="projectCardTop">
+
+                <div>
+                  <span className="sectionLabel">
+                    PROJECT
+                  </span>
+
+                  <h2>
+                    {project.projectName ||
+                      "Untitled Project"}
+                  </h2>
+                </div>
+
+                <span className="statusBadge">
+                  {project.status || "Pending"}
+                </span>
+
+              </div>
 
 
-        <div className="customerStatCard">
+              <div className="projectInfo">
 
-          <span>
-            IN PROGRESS
-          </span>
+                <div>
+                  <span>PACKAGE</span>
 
-          <strong>
-            {
-              projects.filter(
-                (project) =>
-                  project.status ===
-                  "in-progress"
-              ).length
-            }
-          </strong>
-
-        </div>
+                  <strong>
+                    {project.package || "-"}
+                  </strong>
+                </div>
 
 
-        <div className="customerStatCard">
+                <div>
+                  <span>PAYMENT</span>
 
-          <span>
-            COMPLETED
-          </span>
-
-          <strong>
-            {
-              projects.filter(
-                (project) =>
-                  project.status ===
-                  "completed"
-              ).length
-            }
-          </strong>
-
-        </div>
-
-      </div>
+                  <strong>
+                    {project.paymentStatus ||
+                      "Pending"}
+                  </strong>
+                </div>
 
 
-      {/* PROJECTS */}
+                <div>
+                  <span>PROGRESS</span>
 
-      <div className="customersTableContainer">
+                  <strong>
+                    {Number(
+                      project.progress || 0
+                    )}
+                    %
+                  </strong>
+                </div>
 
-        <div className="tableHeader">
-
-          <h2>
-            My Website Projects
-          </h2>
-
-          <span>
-            {projects.length} projects
-          </span>
-
-        </div>
+              </div>
 
 
-        {loading && (
-          <div className="customersMessage">
-            Loading projects...
-          </div>
-        )}
+              <div className="progressBar">
+
+                <div
+                  className="progressFill"
+                  style={{
+                    width: `${Math.min(
+                      Number(project.progress || 0),
+                      100
+                    )}%`,
+                  }}
+                />
+
+              </div>
 
 
-        {!loading && error && (
-          <div className="customersError">
-            {error}
-          </div>
-        )}
-
-
-        {!loading &&
-          !error &&
-          projects.length === 0 && (
-
-            <div className="customersMessage">
-
-              <p>
-                You don't have any projects yet.
+              <p className="projectDescription">
+                {project.description ||
+                  "No project description available."}
               </p>
 
-              <p
-                style={{
-                  marginTop: "10px",
-                  fontSize: "13px",
-                  color: "#555",
-                }}
-              >
-                Start your first website project
-                with VIDA WEB.
-              </p>
 
-              <Link
-                href="/dashboard/new-project"
-                className="primaryButton"
-                style={{
-                  marginTop: "25px",
-                }}
-              >
-                Start New Project →
-              </Link>
+              <div className="projectFooter">
+
+                <span>
+                  {project.createdAt?.toDate
+                    ? project.createdAt
+                        .toDate()
+                        .toLocaleDateString()
+                    : "-"}
+                </span>
+
+                <span>
+                  Project ID: {project.id}
+                </span>
+
+              </div>
 
             </div>
 
-          )}
+          ))}
 
+        </div>
 
-        {!loading &&
-          !error &&
-          projects.length > 0 && (
-
-            <div className="tableWrapper">
-
-              <table className="customersTable">
-
-                <thead>
-
-                  <tr>
-                    <th>#</th>
-                    <th>Project</th>
-                    <th>Package</th>
-                    <th>Status</th>
-                    <th>Created</th>
-                  </tr>
-
-                </thead>
-
-                <tbody>
-
-                  {projects.map(
-                    (project, index) => (
-
-                      <tr key={project.id}>
-
-                        <td>
-                          {index + 1}
-                        </td>
-
-                        <td>
-                          <strong>
-                            {project.projectName ||
-                              "Website Project"}
-                          </strong>
-                        </td>
-
-                        <td>
-                          {project.package ||
-                            project.plan ||
-                            "Custom"}
-                        </td>
-
-                        <td>
-
-                          <span
-                            style={{
-                              color:
-                                getStatusClass(
-                                  project.status
-                                ),
-                              fontWeight:
-                                "600",
-                            }}
-                          >
-                            {project.status ||
-                              "Pending"}
-                          </span>
-
-                        </td>
-
-                        <td>
-                          {formatDate(
-                            project.createdAt
-                          )}
-                        </td>
-
-                      </tr>
-
-                    )
-                  )}
-
-                </tbody>
-
-              </table>
-
-            </div>
-
-          )}
-
-      </div>
+      )}
 
     </div>
   );

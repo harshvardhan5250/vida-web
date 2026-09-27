@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { onAuthStateChanged } from "firebase/auth";
 import {
   collection,
   onSnapshot,
@@ -10,149 +9,114 @@ import {
 } from "firebase/firestore";
 
 import { auth, db } from "../../../lib/firebase";
+import { onAuthStateChanged } from "firebase/auth";
 
-export default function AdminProjectsPage() {
-  const [projects, setProjects] = useState([]);
+export default function AdminMessagesPage() {
+  const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let unsubscribeMessages;
+
     const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
       if (!user) {
         window.location.href = "/login";
         return;
       }
 
-      const projectsQuery = query(
-        collection(db, "projects"),
+      const messagesQuery = query(
+        collection(db, "messages"),
         orderBy("createdAt", "desc")
       );
 
-      const unsubscribeProjects = onSnapshot(
-        projectsQuery,
+      unsubscribeMessages = onSnapshot(
+        messagesQuery,
         (snapshot) => {
           const data = snapshot.docs.map((doc) => ({
             id: doc.id,
             ...doc.data(),
           }));
 
-          setProjects(data);
+          setMessages(data);
           setLoading(false);
         },
         (error) => {
-          console.error("Projects error:", error);
+          console.error("Messages error:", error);
           setLoading(false);
         }
       );
-
-      return unsubscribeProjects;
     });
 
-    return () => unsubscribeAuth();
+    return () => {
+      unsubscribeAuth();
+
+      if (unsubscribeMessages) {
+        unsubscribeMessages();
+      }
+    };
   }, []);
 
   return (
     <div className="adminPage">
-
       <div className="adminHeader">
+        <p className="sectionLabel">ADMIN PANEL</p>
 
-        <p className="sectionLabel">
-          ADMIN PANEL
-        </p>
-
-        <h1>Projects</h1>
+        <h1>Customer Messages</h1>
 
         <p>
-          Manage all website projects from
-          one place.
+          View messages received from VIDA WEB customers.
         </p>
-
       </div>
 
       {loading ? (
-        <p>Loading projects...</p>
-      ) : projects.length === 0 ? (
-
+        <p>Loading messages...</p>
+      ) : messages.length === 0 ? (
         <div className="adminEmpty">
-
-          <h2>No projects yet</h2>
-
+          <h2>No messages yet</h2>
           <p>
-            New customer projects will
-            appear here.
+            Customer messages will appear here.
           </p>
-
         </div>
-
       ) : (
-
         <div className="adminTableWrapper">
-
           <table className="adminTable">
-
             <thead>
-
               <tr>
-                <th>Project</th>
                 <th>Customer</th>
                 <th>Email</th>
-                <th>Package</th>
-                <th>Status</th>
+                <th>Message</th>
                 <th>Date</th>
               </tr>
-
             </thead>
 
             <tbody>
-
-              {projects.map((project) => (
-
-                <tr key={project.id}>
-
+              {messages.map((message) => (
+                <tr key={message.id}>
                   <td>
-                    {project.projectName ||
-                      "Untitled Project"}
+                    {message.name || "Unknown"}
                   </td>
 
                   <td>
-                    {project.customerName ||
-                      project.name ||
-                      "Unknown"}
+                    {message.email || "-"}
                   </td>
 
                   <td>
-                    {project.email || "-"}
+                    {message.message || "-"}
                   </td>
 
                   <td>
-                    {project.package || "-"}
-                  </td>
-
-                  <td>
-                    <span className="statusBadge">
-                      {project.status || "Pending"}
-                    </span>
-                  </td>
-
-                  <td>
-                    {project.createdAt?.toDate
-                      ? project.createdAt
+                    {message.createdAt?.toDate
+                      ? message.createdAt
                           .toDate()
                           .toLocaleString()
                       : "-"}
                   </td>
-
                 </tr>
-
               ))}
-
             </tbody>
-
           </table>
-
         </div>
-
       )}
-
     </div>
   );
 }

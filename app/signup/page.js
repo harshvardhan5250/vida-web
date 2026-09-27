@@ -1,15 +1,21 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import Link from "next/link";
+import {
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
+import { doc, setDoc, serverTimestamp } from "firebase/firestore";
+
 import { auth, db } from "../../lib/firebase";
 
 export default function SignupPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] =
+    useState("");
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -18,43 +24,67 @@ export default function SignupPage() {
     e.preventDefault();
 
     setError("");
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    if (password.length < 6) {
+      setError(
+        "Password must be at least 6 characters."
+      );
+      return;
+    }
+
     setLoading(true);
 
     try {
-      // Create Firebase Authentication account
+      // Create Firebase account
       const userCredential =
         await createUserWithEmailAndPassword(
           auth,
-          email,
+          email.trim(),
           password
         );
 
       const user = userCredential.user;
 
-      // Save additional user information in Firestore
-      await setDoc(doc(db, "users", user.uid), {
-        name: name,
-        email: email,
-        uid: user.uid,
-        createdAt: new Date(),
+      // Save name in Firebase Authentication
+      await updateProfile(user, {
+        displayName: name.trim(),
       });
 
-      // Signup successful
-      window.location.href = "/login";
+      // Save customer data in Firestore
+      await setDoc(doc(db, "users", user.uid), {
+        name: name.trim(),
+        email: user.email,
+        uid: user.uid,
+        createdAt: serverTimestamp(),
+      });
 
-    } catch (error) {
-      console.error(error);
+      // Go to dashboard
+      window.location.href = "/dashboard";
+    } catch (err) {
+      console.error("Signup error:", err);
 
-      if (error.code === "auth/email-already-in-use") {
-        setError("This email is already registered.");
-      } else if (error.code === "auth/weak-password") {
-        setError("Password must be at least 6 characters.");
-      } else if (error.code === "auth/invalid-email") {
-        setError("Please enter a valid email.");
+      if (err.code === "auth/email-already-in-use") {
+        setError(
+          "An account already exists with this email."
+        );
+      } else if (err.code === "auth/invalid-email") {
+        setError(
+          "Please enter a valid email address."
+        );
+      } else if (err.code === "auth/weak-password") {
+        setError(
+          "Password is too weak. Use at least 6 characters."
+        );
       } else {
-        setError("Something went wrong. Please try again.");
+        setError(
+          "Unable to create account. Please try again."
+        );
       }
-
     } finally {
       setLoading(false);
     }
@@ -62,63 +92,126 @@ export default function SignupPage() {
 
   return (
     <div className="authPage">
-      <div className="authBox">
+
+      <div className="authCard">
+
+        {/* HEADER */}
 
         <div className="authHeader">
-          <h1>Create Account</h1>
+
+          <p className="sectionLabel">
+            VIDA WEB
+          </p>
+
+          <h1>
+            Create Account
+          </h1>
 
           <p>
-            Start your project with VIDA WEB.
+            Create your account and start
+            building your website with VIDA WEB.
           </p>
+
         </div>
+
+
+        {/* FORM */}
 
         <form
           className="authForm"
           onSubmit={handleSignup}
         >
 
-          <div className="inputGroup">
-            <label>Full Name</label>
+          <div className="formGroup">
+
+            <label htmlFor="name">
+              Full Name
+            </label>
 
             <input
+              id="name"
               type="text"
-              placeholder="Enter your name"
+              placeholder="Harsh Vardhan"
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) =>
+                setName(e.target.value)
+              }
               required
             />
+
           </div>
 
-          <div className="inputGroup">
-            <label>Email</label>
+
+          <div className="formGroup">
+
+            <label htmlFor="email">
+              Email Address
+            </label>
 
             <input
+              id="email"
               type="email"
-              placeholder="Enter your email"
+              placeholder="you@example.com"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) =>
+                setEmail(e.target.value)
+              }
               required
             />
+
           </div>
 
-          <div className="inputGroup">
-            <label>Password</label>
+
+          <div className="formGroup">
+
+            <label htmlFor="password">
+              Password
+            </label>
 
             <input
+              id="password"
               type="password"
               placeholder="Create a password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              minLength={6}
+              onChange={(e) =>
+                setPassword(e.target.value)
+              }
               required
             />
+
           </div>
 
+
+          <div className="formGroup">
+
+            <label htmlFor="confirmPassword">
+              Confirm Password
+            </label>
+
+            <input
+              id="confirmPassword"
+              type="password"
+              placeholder="Confirm your password"
+              value={confirmPassword}
+              onChange={(e) =>
+                setConfirmPassword(e.target.value)
+              }
+              required
+            />
+
+          </div>
+
+
+          {/* ERROR */}
+
           {error && (
-            <p className="authError">
+            <div className="contactError">
               {error}
-            </p>
+            </div>
           )}
+
+
+          {/* BUTTON */}
 
           <button
             type="submit"
@@ -132,16 +225,23 @@ export default function SignupPage() {
 
         </form>
 
+
+        {/* FOOTER */}
+
         <div className="authFooter">
+
           <p>
-            Already have an account?{" "}
-            <Link href="/login">
-              Login
-            </Link>
+            Already have an account?
           </p>
+
+          <Link href="/login">
+            Login →
+          </Link>
+
         </div>
 
       </div>
+
     </div>
   );
 }

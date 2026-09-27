@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { onAuthStateChanged } from "firebase/auth";
 import {
   collection,
   onSnapshot,
@@ -9,15 +10,12 @@ import {
 } from "firebase/firestore";
 
 import { auth, db } from "../../../lib/firebase";
-import { onAuthStateChanged } from "firebase/auth";
 
 export default function AdminMessagesPage() {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    let unsubscribeMessages;
-
     const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
       if (!user) {
         window.location.href = "/login";
@@ -29,7 +27,7 @@ export default function AdminMessagesPage() {
         orderBy("createdAt", "desc")
       );
 
-      unsubscribeMessages = onSnapshot(
+      const unsubscribeMessages = onSnapshot(
         messagesQuery,
         (snapshot) => {
           const data = snapshot.docs.map((doc) => ({
@@ -45,53 +43,69 @@ export default function AdminMessagesPage() {
           setLoading(false);
         }
       );
+
+      return unsubscribeMessages;
     });
 
-    return () => {
-      unsubscribeAuth();
-
-      if (unsubscribeMessages) {
-        unsubscribeMessages();
-      }
-    };
+    return () => unsubscribeAuth();
   }, []);
 
   return (
     <div className="adminPage">
+
       <div className="adminHeader">
-        <p className="sectionLabel">ADMIN PANEL</p>
+
+        <p className="sectionLabel">
+          ADMIN PANEL
+        </p>
 
         <h1>Customer Messages</h1>
 
         <p>
-          View messages received from VIDA WEB customers.
+          View and manage messages received
+          from VIDA WEB customers.
         </p>
+
       </div>
 
       {loading ? (
         <p>Loading messages...</p>
       ) : messages.length === 0 ? (
+
         <div className="adminEmpty">
+
           <h2>No messages yet</h2>
+
           <p>
             Customer messages will appear here.
           </p>
+
         </div>
+
       ) : (
+
         <div className="adminTableWrapper">
+
           <table className="adminTable">
+
             <thead>
+
               <tr>
                 <th>Customer</th>
                 <th>Email</th>
                 <th>Message</th>
+                <th>Sender</th>
                 <th>Date</th>
               </tr>
+
             </thead>
 
             <tbody>
+
               {messages.map((message) => (
+
                 <tr key={message.id}>
+
                   <td>
                     {message.name || "Unknown"}
                   </td>
@@ -100,8 +114,12 @@ export default function AdminMessagesPage() {
                     {message.email || "-"}
                   </td>
 
-                  <td>
+                  <td className="messageCell">
                     {message.message || "-"}
+                  </td>
+
+                  <td>
+                    {message.sender || "customer"}
                   </td>
 
                   <td>
@@ -111,12 +129,19 @@ export default function AdminMessagesPage() {
                           .toLocaleString()
                       : "-"}
                   </td>
+
                 </tr>
+
               ))}
+
             </tbody>
+
           </table>
+
         </div>
+
       )}
+
     </div>
   );
 }

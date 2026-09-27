@@ -1,326 +1,176 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
+import { onAuthStateChanged } from "firebase/auth";
 import {
   collection,
-  getDocs,
+  onSnapshot,
+  orderBy,
+  query,
 } from "firebase/firestore";
 
-import { db } from "../../../lib/firebase";
+import { auth, db } from "../../../lib/firebase";
 
-export default function PaymentsPage() {
+export default function AdminPaymentsPage() {
   const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
 
   useEffect(() => {
-    const fetchPayments = async () => {
-      try {
-        const snapshot = await getDocs(
-          collection(db, "payments")
-        );
-
-        const data = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-
-        setPayments(data);
-      } catch (err) {
-        console.error("Payments error:", err);
-
-        setError(
-          "Unable to load payments. Please check your Firebase data."
-        );
-      } finally {
-        setLoading(false);
+    const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.href = "/login";
+        return;
       }
-    };
 
-    fetchPayments();
+      const paymentsQuery = query(
+        collection(db, "payments"),
+        orderBy("createdAt", "desc")
+      );
+
+      const unsubscribePayments = onSnapshot(
+        paymentsQuery,
+        (snapshot) => {
+          const data = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+
+          setPayments(data);
+          setLoading(false);
+        },
+        (error) => {
+          console.error("Payments error:", error);
+          setLoading(false);
+        }
+      );
+
+      return unsubscribePayments;
+    });
+
+    return () => unsubscribeAuth();
   }, []);
 
-  const formatDate = (date) => {
-    if (!date) return "N/A";
-
-    try {
-      if (typeof date.toDate === "function") {
-        return date.toDate().toLocaleString("en-IN");
-      }
-
-      return new Date(date).toLocaleString("en-IN");
-    } catch {
-      return "N/A";
-    }
-  };
+  const totalAmount = payments.reduce(
+    (total, payment) =>
+      total + Number(payment.amount || 0),
+    0
+  );
 
   return (
-    <div className="adminCustomersPage">
+    <div className="adminPage">
 
-      {/* HEADER */}
+      <div className="adminHeader">
 
-      <div className="customersHeader">
+        <p className="sectionLabel">
+          ADMIN PANEL
+        </p>
 
-        <div>
-          <p className="sectionLabel">
-            ADMIN PANEL
+        <h1>Payments</h1>
+
+        <p>
+          Track all customer payments and
+          transactions.
+        </p>
+
+      </div>
+
+      <div className="adminStats">
+
+        <div className="adminStatCard">
+          <span>Total Payments</span>
+          <strong>{payments.length}</strong>
+        </div>
+
+        <div className="adminStatCard">
+          <span>Total Amount</span>
+          <strong>₹{totalAmount.toLocaleString()}</strong>
+        </div>
+
+      </div>
+
+      {loading ? (
+        <p>Loading payments...</p>
+      ) : payments.length === 0 ? (
+
+        <div className="adminEmpty">
+
+          <h2>No payments yet</h2>
+
+          <p>
+            Customer payments will appear here.
           </p>
 
-          <h1>
-            Payments
-          </h1>
-
-          <p className="customersSubtitle">
-            View customer payments and
-            transaction information.
-          </p>
         </div>
 
-        <Link
-          href="/admin"
-          className="backButton"
-        >
-          ← Admin Dashboard
-        </Link>
+      ) : (
 
-      </div>
+        <div className="adminTableWrapper">
 
+          <table className="adminTable">
 
-      {/* STATS */}
+            <thead>
 
-      <div className="customerStats">
+              <tr>
+                <th>Customer</th>
+                <th>Email</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Payment ID</th>
+                <th>Date</th>
+              </tr>
 
-        <div className="customerStatCard">
+            </thead>
 
-          <span>
-            TOTAL PAYMENTS
-          </span>
+            <tbody>
 
-          <strong>
-            {payments.length}
-          </strong>
+              {payments.map((payment) => (
 
-        </div>
+                <tr key={payment.id}>
 
+                  <td>
+                    {payment.name || "Unknown"}
+                  </td>
 
-        <div className="customerStatCard">
+                  <td>
+                    {payment.email || "-"}
+                  </td>
 
-          <span>
-            DATABASE
-          </span>
+                  <td>
+                    ₹{Number(
+                      payment.amount || 0
+                    ).toLocaleString()}
+                  </td>
 
-          <strong>
-            Firebase
-          </strong>
+                  <td>
+                    <span className="statusBadge">
+                      {payment.status || "Pending"}
+                    </span>
+                  </td>
 
-        </div>
+                  <td>
+                    {payment.paymentId ||
+                      payment.id}
+                  </td>
 
+                  <td>
+                    {payment.createdAt?.toDate
+                      ? payment.createdAt
+                          .toDate()
+                          .toLocaleString()
+                      : "-"}
+                  </td>
 
-        <div className="customerStatCard">
+                </tr>
 
-          <span>
-            STATUS
-          </span>
+              ))}
 
-          <strong>
-            Active
-          </strong>
+            </tbody>
 
-        </div>
-
-      </div>
-
-
-      {/* PAYMENTS TABLE */}
-
-      <div className="customersTableContainer">
-
-        <div className="tableHeader">
-
-          <h2>
-            Payment Records
-          </h2>
-
-          <span>
-            {payments.length} payments
-          </span>
+          </table>
 
         </div>
 
-
-        {loading && (
-          <div className="customersMessage">
-            Loading payments...
-          </div>
-        )}
-
-
-        {!loading && error && (
-          <div className="customersError">
-            {error}
-          </div>
-        )}
-
-
-        {!loading &&
-          !error &&
-          payments.length === 0 && (
-
-            <div className="customersMessage">
-
-              <p>
-                No payments found.
-              </p>
-
-              <p
-                style={{
-                  marginTop: "10px",
-                  fontSize: "13px",
-                  color: "#555",
-                }}
-              >
-                Customer payment records
-                will appear here.
-              </p>
-
-            </div>
-
-          )}
-
-
-        {!loading &&
-          !error &&
-          payments.length > 0 && (
-
-            <div className="tableWrapper">
-
-              <table className="customersTable">
-
-                <thead>
-
-                  <tr>
-                    <th>#</th>
-                    <th>Customer</th>
-                    <th>Email</th>
-                    <th>Amount</th>
-                    <th>Status</th>
-                    <th>Payment ID</th>
-                    <th>Date</th>
-                  </tr>
-
-                </thead>
-
-
-                <tbody>
-
-                  {payments.map(
-                    (payment, index) => (
-
-                      <tr key={payment.id}>
-
-                        <td>
-                          {index + 1}
-                        </td>
-
-
-                        <td>
-
-                          <div className="customerName">
-
-                            <div className="customerAvatar">
-
-                              {(
-                                payment.name ||
-                                payment.fullName ||
-                                "C"
-                              )
-                                .charAt(0)
-                                .toUpperCase()}
-
-                            </div>
-
-                            <strong>
-                              {payment.name ||
-                                payment.fullName ||
-                                "Customer"}
-                            </strong>
-
-                          </div>
-
-                        </td>
-
-
-                        <td>
-                          {payment.email ||
-                            "N/A"}
-                        </td>
-
-
-                        <td>
-
-                          ₹
-                          {payment.amount ??
-                            payment.price ??
-                            "0"}
-
-                        </td>
-
-
-                        <td>
-
-                          <span
-                            style={{
-                              color:
-                                payment.status ===
-                                "success"
-                                  ? "#6ee7b7"
-                                  : "#aaa",
-                              fontWeight: "600",
-                            }}
-                          >
-                            {payment.status ||
-                              "Pending"}
-                          </span>
-
-                        </td>
-
-
-                        <td>
-
-                          <span className="userId">
-
-                            {payment.paymentId ||
-                              payment.transactionId ||
-                              payment.id}
-
-                          </span>
-
-                        </td>
-
-
-                        <td>
-
-                          {formatDate(
-                            payment.createdAt
-                          )}
-
-                        </td>
-
-                      </tr>
-
-                    )
-                  )}
-
-                </tbody>
-
-              </table>
-
-            </div>
-
-          )}
-
-      </div>
+      )}
 
     </div>
   );

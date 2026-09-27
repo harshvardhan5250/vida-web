@@ -1,8 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
+import Link from "next/link";
 import { signInWithEmailAndPassword } from "firebase/auth";
+
 import { auth } from "../../lib/firebase";
 
 export default function LoginPage() {
@@ -15,34 +16,37 @@ export default function LoginPage() {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    setError("");
     setLoading(true);
+    setError("");
 
     try {
       await signInWithEmailAndPassword(
         auth,
-        email,
+        email.trim(),
         password
       );
 
-      // Login successful
       window.location.href = "/dashboard";
+    } catch (err) {
+      console.error("Login error:", err);
 
-    } catch (error) {
-      console.error(error);
-
-      if (
-        error.code === "auth/invalid-credential" ||
-        error.code === "auth/wrong-password" ||
-        error.code === "auth/user-not-found"
-      ) {
-        setError("Email or password is incorrect.");
-      } else if (error.code === "auth/invalid-email") {
-        setError("Please enter a valid email.");
+      if (err.code === "auth/invalid-credential") {
+        setError(
+          "Incorrect email or password."
+        );
+      } else if (err.code === "auth/invalid-email") {
+        setError(
+          "Please enter a valid email address."
+        );
+      } else if (err.code === "auth/user-disabled") {
+        setError(
+          "This account has been disabled."
+        );
       } else {
-        setError("Something went wrong. Please try again.");
+        setError(
+          "Unable to login. Please try again."
+        );
       }
-
     } finally {
       setLoading(false);
     }
@@ -51,39 +55,78 @@ export default function LoginPage() {
   return (
     <div className="authPage">
 
-      <div className="authBox">
+      <div className="authCard">
+
+        {/* HEADER */}
 
         <div className="authHeader">
-          <h1>Welcome Back</h1>
+
+          <p className="sectionLabel">
+            VIDA WEB
+          </p>
+
+          <h1>
+            Welcome Back
+          </h1>
 
           <p>
-            Login to manage your project with VIDA WEB.
+            Login to manage your projects,
+            payments and account.
           </p>
+
         </div>
+
+
+        {/* LOGIN FORM */}
 
         <form
           className="authForm"
           onSubmit={handleLogin}
         >
 
-          <div className="inputGroup">
-            <label>Email</label>
+          {/* EMAIL */}
+
+          <div className="formGroup">
+
+            <label htmlFor="email">
+              Email Address
+            </label>
 
             <input
+              id="email"
               type="email"
-              placeholder="Enter your email"
+              placeholder="you@example.com"
               value={email}
               onChange={(e) =>
                 setEmail(e.target.value)
               }
               required
             />
+
           </div>
 
-          <div className="inputGroup">
-            <label>Password</label>
+
+          {/* PASSWORD */}
+
+          <div className="formGroup">
+
+            <div className="passwordLabelRow">
+
+              <label htmlFor="password">
+                Password
+              </label>
+
+              <Link
+                href="/forgot-password"
+                className="forgotPassword"
+              >
+                Forgot Password?
+              </Link>
+
+            </div>
 
             <input
+              id="password"
               type="password"
               placeholder="Enter your password"
               value={password}
@@ -92,19 +135,20 @@ export default function LoginPage() {
               }
               required
             />
+
           </div>
 
-          <div className="forgotPassword">
-            <Link href="/forgot-password">
-              Forgot Password?
-            </Link>
-          </div>
+
+          {/* ERROR */}
 
           {error && (
-            <p className="authError">
+            <div className="contactError">
               {error}
-            </p>
+            </div>
           )}
+
+
+          {/* LOGIN BUTTON */}
 
           <button
             type="submit"
@@ -118,13 +162,19 @@ export default function LoginPage() {
 
         </form>
 
+
+        {/* SIGNUP */}
+
         <div className="authFooter">
+
           <p>
-            Don't have an account?{" "}
-            <Link href="/signup">
-              Create Account
-            </Link>
+            Don&apos;t have an account?
           </p>
+
+          <Link href="/signup">
+            Create an account →
+          </Link>
+
         </div>
 
       </div>

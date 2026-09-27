@@ -1,226 +1,131 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "../../../lib/firebase";
+import { onAuthStateChanged } from "firebase/auth";
+import {
+  collection,
+  onSnapshot,
+  orderBy,
+  query,
+} from "firebase/firestore";
 
-export default function CustomersPage() {
+import { auth, db } from "../../../lib/firebase";
+
+export default function AdminCustomersPage() {
   const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
 
   useEffect(() => {
-    const fetchCustomers = async () => {
-      try {
-        setLoading(true);
-        setError("");
-
-        const snapshot = await getDocs(
-          collection(db, "users")
-        );
-
-        const customerList = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-
-        setCustomers(customerList);
-      } catch (err) {
-        console.error(err);
-        setError("Unable to load customers.");
-      } finally {
-        setLoading(false);
+    const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.href = "/login";
+        return;
       }
-    };
 
-    fetchCustomers();
+      const customersQuery = query(
+        collection(db, "users"),
+        orderBy("createdAt", "desc")
+      );
+
+      const unsubscribeCustomers = onSnapshot(
+        customersQuery,
+        (snapshot) => {
+          const data = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+
+          setCustomers(data);
+          setLoading(false);
+        },
+        (error) => {
+          console.error("Customers error:", error);
+          setLoading(false);
+        }
+      );
+
+      return unsubscribeCustomers;
+    });
+
+    return () => unsubscribeAuth();
   }, []);
 
   return (
-    <div className="adminCustomersPage">
+    <div className="adminPage">
 
-      {/* Header */}
-      <div className="customersHeader">
+      <div className="adminHeader">
+        <p className="sectionLabel">ADMIN PANEL</p>
 
-        <div>
-          <p className="sectionLabel">
-            ADMIN PANEL
+        <h1>Customers</h1>
+
+        <p>
+          Manage all VIDA WEB customers from one place.
+        </p>
+      </div>
+
+      {loading ? (
+        <p>Loading customers...</p>
+      ) : customers.length === 0 ? (
+        <div className="adminEmpty">
+          <h2>No customers yet</h2>
+
+          <p>
+            Registered customers will appear here.
           </p>
-
-          <h1>
-            Customers
-          </h1>
-
-          <p className="customersSubtitle">
-            Manage all registered VIDA WEB customers.
-          </p>
         </div>
+      ) : (
+        <div className="adminTableWrapper">
 
-        <Link
-          href="/dashboard"
-          className="backButton"
-        >
-          ← Dashboard
-        </Link>
+          <table className="adminTable">
 
-      </div>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Customer ID</th>
+                <th>Joined</th>
+              </tr>
+            </thead>
 
-      {/* Stats */}
-      <div className="customerStats">
+            <tbody>
 
-        <div className="customerStatCard">
-          <span>Total Customers</span>
-          <strong>{customers.length}</strong>
+              {customers.map((customer) => (
+
+                <tr key={customer.id}>
+
+                  <td>
+                    {customer.name || "Unknown"}
+                  </td>
+
+                  <td>
+                    {customer.email || "-"}
+                  </td>
+
+                  <td>
+                    <span className="tableId">
+                      {customer.uid || customer.id}
+                    </span>
+                  </td>
+
+                  <td>
+                    {customer.createdAt?.toDate
+                      ? customer.createdAt
+                          .toDate()
+                          .toLocaleDateString()
+                      : "-"}
+                  </td>
+
+                </tr>
+
+              ))}
+
+            </tbody>
+
+          </table>
+
         </div>
-
-        <div className="customerStatCard">
-          <span>Registered Users</span>
-          <strong>{customers.length}</strong>
-        </div>
-
-        <div className="customerStatCard">
-          <span>Database</span>
-          <strong>Firebase</strong>
-        </div>
-
-      </div>
-
-      {/* Customer Table */}
-      <div className="customersTableContainer">
-
-        <div className="tableHeader">
-          <h2>Customer List</h2>
-
-          <span>
-            {customers.length} Customers
-          </span>
-        </div>
-
-        {loading && (
-          <div className="customersMessage">
-            Loading customers...
-          </div>
-        )}
-
-        {error && (
-          <div className="customersError">
-            {error}
-          </div>
-        )}
-
-        {!loading &&
-          !error &&
-          customers.length === 0 && (
-            <div className="customersMessage">
-              No customers registered yet.
-            </div>
-          )}
-
-        {!loading &&
-          !error &&
-          customers.length > 0 && (
-
-            <div className="tableWrapper">
-
-              <table className="customersTable">
-
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>User ID</th>
-                    <th>Created</th>
-                  </tr>
-                </thead>
-
-                <tbody>
-
-                  {customers.map((customer, index) => (
-
-                    <tr key={customer.id}>
-
-                      <td>
-                        {index + 1}
-                      </td>
-
-                      <td>
-                        <div className="customerName">
-                          <div className="customerAvatar">
-                            {customer.name
-                              ? customer.name
-                                  .charAt(0)
-                                  .toUpperCase()
-                              : "U"}
-                          </div>
-
-                          <strong>
-                            {customer.name ||
-                              "Unnamed User"}
-                          </strong>
-                        </div>
-                      </td>
-
-                      <td>
-                        {customer.email ||
-                          "No email"}
-                      </td>
-
-                      <td>
-                        <span className="userId">
-                          {customer.uid ||
-                            customer.id}
-                        </span>
-                      </td>
-
-                      <td>
-                        {customer.createdAt
-                          ? formatDate(
-                              customer.createdAt
-                            )
-                          : "—"}
-                      </td>
-
-                    </tr>
-
-                  ))}
-
-                </tbody>
-
-              </table>
-
-            </div>
-
-          )}
-
-      </div>
+      )}
 
     </div>
   );
-}
-
-
-/* =========================
-   DATE FORMATTER
-========================= */
-
-function formatDate(timestamp) {
-  try {
-
-    if (
-      timestamp &&
-      typeof timestamp.toDate === "function"
-    ) {
-      return timestamp
-        .toDate()
-        .toLocaleDateString("en-IN");
-    }
-
-    return new Date(timestamp)
-      .toLocaleDateString("en-IN");
-
-  } catch {
-    return "—";
-  }
 }

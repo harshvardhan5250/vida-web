@@ -1,11 +1,11 @@
 /* =========================================================
-   GLOBAL RESET
-========================================================= */
+   VIDA WEB — GLOBAL STYLES
+   ========================================================= */
 
 * {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
 }
 
 html {
@@ -13,65 +13,128 @@ html {
 }
 
 body {
+  background: #070707;
+  color: #f5f5f5;
   font-family: Arial, Helvetica, sans-serif;
-  background: #080808;
-  color: #ffffff;
+  line-height: 1.6;
 }
 
 a {
-  text-decoration: none;
   color: inherit;
+  text-decoration: none;
 }
 
 button,
 input,
 textarea,
 select {
-  font-family: inherit;
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+main {
+  min-height: 70vh;
+}
+
+/* =========================================================
+   GLOBAL
+   ========================================================= */
+
+.sectionLabel {
+  color: #a78bfa;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.dashboardButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px 22px;
+  border: 1px solid #a78bfa;
+  border-radius: 8px;
+  background: #a78bfa;
+  color: #080808;
+  font-size: 14px;
+  font-weight: 700;
+  transition: 0.25s ease;
+}
+
+.dashboardButton:hover {
+  background: #c4b5fd;
+  border-color: #c4b5fd;
+  transform: translateY(-2px);
+}
+
+.secondaryButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 13px 22px;
+  border: 1px solid #333;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  transition: 0.25s ease;
+}
+
+.secondaryButton:hover {
+  border-color: #777;
+  transform: translateY(-2px);
 }
 
 
 /* =========================================================
    NAVBAR
-========================================================= */
+   ========================================================= */
 
 .navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
   width: 100%;
-  border-bottom: 1px solid #222;
-  background: #080808;
+  border-bottom: 1px solid #1c1c1c;
+  background: rgba(7, 7, 7, 0.9);
+  backdrop-filter: blur(15px);
 }
 
 .navContainer {
-  max-width: 1200px;
+  width: min(1180px, 92%);
+  min-height: 76px;
   margin: auto;
-  height: 75px;
-  padding: 0 25px;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 25px;
 }
 
 .logo {
-  font-size: 24px;
-  font-weight: 800;
+  font-size: 21px;
+  font-weight: 900;
   letter-spacing: -1px;
 }
 
-.logo span,
-.footerBrand span {
-  color: #7c5cff;
+.logo span {
+  color: #a78bfa;
 }
 
 .navLinks {
   display: flex;
+  align-items: center;
   gap: 28px;
 }
 
 .navLinks a {
   color: #aaa;
   font-size: 14px;
-  transition: 0.2s;
+  transition: 0.2s ease;
 }
 
 .navLinks a:hover {
@@ -81,307 +144,79 @@ select {
 .navButtons {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
+}
+
+.loginButton,
+.signupButton {
+  border-radius: 7px;
+  padding: 9px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  transition: 0.2s ease;
 }
 
 .loginButton {
-  color: #fff;
-  padding: 10px 18px;
+  color: #ddd;
+  border: 1px solid #292929;
 }
 
-.signupButton,
-.primaryButton {
-  background: #7c5cff;
-  color: #fff;
-  padding: 12px 20px;
-  border-radius: 8px;
-  display: inline-block;
-}
-
-.signupButton:hover,
-.primaryButton:hover {
-  opacity: 0.85;
-}
-
-
-/* =========================================================
-   HOME
-========================================================= */
-
-.hero {
-  min-height: 700px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  text-align: center;
-  padding: 80px 20px;
-
-  background: radial-gradient(
-    circle at center,
-    #17102d 0%,
-    #080808 55%
-  );
-}
-
-.heroContent {
-  max-width: 850px;
-}
-
-.heroTag {
-  color: #7c5cff;
-  font-size: 13px;
-  font-weight: bold;
-  letter-spacing: 2px;
-  margin-bottom: 25px;
-}
-
-.hero h1 {
-  font-size: clamp(55px, 9vw, 105px);
-  line-height: 0.95;
-  letter-spacing: -5px;
-}
-
-.hero h1 span {
-  color: #7c5cff;
-}
-
-.heroDescription {
-  max-width: 600px;
-  margin: 30px auto;
-  color: #aaa;
-  font-size: 18px;
-  line-height: 1.7;
-}
-
-.heroButtons {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  margin-top: 30px;
-}
-
-.secondaryButton {
-  border: 1px solid #333;
-  padding: 12px 20px;
-  border-radius: 8px;
-}
-
-
-/* =========================================================
-   HOME SERVICES
-========================================================= */
-
-.servicesPreview {
-  max-width: 1200px;
-  margin: auto;
-  padding: 120px 25px;
-}
-
-.sectionHeading {
-  margin-bottom: 50px;
-}
-
-.sectionHeading p,
-.sectionLabel {
-  color: #7c5cff;
-  font-size: 13px;
-  font-weight: bold;
-  letter-spacing: 2px;
-}
-
-.sectionHeading h2 {
-  margin-top: 15px;
-  font-size: 48px;
-}
-
-.sectionHeading h2 span {
-  color: #777;
-}
-
-.serviceGrid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-}
-
-.serviceBox {
-  padding: 35px;
-  border: 1px solid #222;
-  border-radius: 14px;
-  background: #0d0d0d;
-}
-
-.serviceNumber {
-  color: #7c5cff;
-  margin-bottom: 30px;
-}
-
-.serviceBox h3 {
-  font-size: 25px;
-  margin-bottom: 12px;
-}
-
-.serviceBox p {
-  color: #888;
-  line-height: 1.6;
-}
-
-
-/* =========================================================
-   HOME PRICING
-========================================================= */
-
-.pricingPreview {
-  text-align: center;
-  padding: 120px 25px;
-  background: #0d0d0d;
-}
-
-.pricingPreview h2 {
-  font-size: 50px;
-  max-width: 750px;
-  margin: 20px auto;
-}
-
-.pricingPreview h2 span {
-  color: #7c5cff;
-}
-
-.pricingPreview p {
-  color: #888;
-  max-width: 600px;
-  margin: 0 auto 30px;
-  line-height: 1.6;
-}
-
-
-/* =========================================================
-   HOME CTA
-========================================================= */
-
-.ctaSection {
-  text-align: center;
-  padding: 130px 20px;
-}
-
-.ctaSection h2 {
-  font-size: 50px;
-  margin-bottom: 20px;
-}
-
-.ctaSection p {
-  color: #888;
-  margin-bottom: 30px;
-}
-
-
-/* =========================================================
-   FOOTER
-========================================================= */
-
-.footer {
-  border-top: 1px solid #222;
-  padding: 70px 25px 25px;
-}
-
-.footerContainer {
-  max-width: 1200px;
-  margin: auto;
-
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
-  gap: 50px;
-}
-
-.footerBrand h2 {
-  font-size: 25px;
-}
-
-.footerBrand p {
-  max-width: 350px;
-  color: #777;
-  line-height: 1.6;
-  margin-top: 15px;
-}
-
-.footerLinks {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.footerLinks h3 {
-  margin-bottom: 10px;
-}
-
-.footerLinks a {
-  color: #777;
-}
-
-.footerLinks a:hover {
+.loginButton:hover {
+  border-color: #555;
   color: #fff;
 }
 
-.copyright {
-  max-width: 1200px;
-  margin: 60px auto 0;
-  padding-top: 20px;
-  border-top: 1px solid #222;
-  color: #555;
-  font-size: 13px;
+.signupButton {
+  border: 1px solid #a78bfa;
+  background: #a78bfa;
+  color: #080808;
+}
+
+.signupButton:hover {
+  background: #c4b5fd;
 }
 
 
 /* =========================================================
-   AUTH
-========================================================= */
+   AUTH — LOGIN / SIGNUP / FORGOT PASSWORD
+   ========================================================= */
 
 .authPage {
-  min-height: calc(100vh - 75px);
-
+  min-height: calc(100vh - 76px);
   display: flex;
   align-items: center;
   justify-content: center;
-
-  padding: 60px 20px;
-
-  background: radial-gradient(
-    circle at 50% 20%,
-    #1b1235 0%,
-    #0b0b0b 45%,
-    #080808 100%
-  );
+  padding: 70px 20px;
+  background:
+    radial-gradient(
+      circle at 50% 20%,
+      rgba(124, 58, 237, 0.13),
+      transparent 35%
+    ),
+    #070707;
 }
 
-.authBox {
-  width: 100%;
-  max-width: 430px;
-
+.authCard {
+  width: min(450px, 100%);
   padding: 42px;
-
-  background: rgba(15, 15, 15, 0.95);
-
-  border: 1px solid #252525;
-  border-radius: 18px;
-
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  border: 1px solid #222;
+  border-radius: 16px;
+  background: #0d0d0d;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.45);
 }
 
 .authHeader {
-  text-align: center;
   margin-bottom: 32px;
 }
 
 .authHeader h1 {
-  margin-bottom: 10px;
-  font-size: 34px;
-  line-height: 1.2;
-  letter-spacing: -1px;
+  margin: 9px 0 10px;
+  font-size: 35px;
+  line-height: 1.15;
+  letter-spacing: -1.5px;
 }
 
-.authHeader p {
+.authHeader > p:last-child {
   color: #888;
   font-size: 14px;
 }
@@ -392,75 +227,74 @@ select {
   gap: 19px;
 }
 
-.inputGroup {
+.formGroup {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.inputGroup label {
-  color: #d0d0d0;
+.formGroup label {
+  color: #ddd;
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 600;
 }
 
-.inputGroup input {
+.formGroup input,
+.formGroup textarea,
+.formGroup select {
   width: 100%;
-  height: 48px;
-
-  padding: 0 14px;
-
-  background: #090909;
-  color: #fff;
-
-  border: 1px solid #292929;
-  border-radius: 9px;
-
+  padding: 13px 14px;
   outline: none;
-  font-size: 14px;
+  border: 1px solid #292929;
+  border-radius: 8px;
+  background: #111;
+  color: #fff;
+  transition: 0.2s ease;
 }
 
-.inputGroup input::placeholder {
+.formGroup input::placeholder,
+.formGroup textarea::placeholder {
   color: #555;
 }
 
-.inputGroup input:focus {
-  border-color: #7c5cff;
+.formGroup input:focus,
+.formGroup textarea:focus,
+.formGroup select:focus {
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
 
-  box-shadow:
-    0 0 0 3px rgba(124, 92, 255, 0.1);
+.passwordLabelRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
 }
 
 .forgotPassword {
-  text-align: right;
-  margin-top: -8px;
+  color: #a78bfa;
+  font-size: 12px;
 }
 
-.forgotPassword a {
-  color: #9b87ff;
-  font-size: 13px;
+.forgotPassword:hover {
+  text-decoration: underline;
 }
 
 .authButton {
   width: 100%;
-  height: 48px;
-
   margin-top: 5px;
-
-  border: none;
-  border-radius: 9px;
-
-  background: #7c5cff;
-  color: #fff;
-
+  padding: 14px;
+  border: 1px solid #a78bfa;
+  border-radius: 8px;
+  background: #a78bfa;
+  color: #080808;
   font-size: 14px;
-  font-weight: 600;
-
-  cursor: pointer;
+  font-weight: 800;
+  transition: 0.2s ease;
 }
 
 .authButton:hover {
-  background: #8b70ff;
+  background: #c4b5fd;
 }
 
 .authButton:disabled {
@@ -469,1498 +303,1577 @@ select {
 }
 
 .authFooter {
-  text-align: center;
   margin-top: 25px;
+  padding-top: 22px;
+  border-top: 1px solid #202020;
+  text-align: center;
 }
 
 .authFooter p {
   color: #777;
+  margin-bottom: 5px;
   font-size: 13px;
 }
 
 .authFooter a {
-  color: #9b87ff;
-}
-
-.authError {
-  color: #ff6b6b;
-  font-size: 13px;
-  text-align: center;
+  color: #a78bfa;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 
 /* =========================================================
-   SERVICES PAGE
-========================================================= */
+   HOME
+   ========================================================= */
 
-.servicesHero {
-  text-align: center;
-
-  padding: 110px 20px 80px;
-
-  background: radial-gradient(
-    circle at center,
-    #17102d 0%,
-    #080808 60%
-  );
+.homePage {
+  overflow: hidden;
 }
 
-.servicesHero h1 {
-  margin-top: 20px;
+.hero {
+  min-height: 680px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 20px;
+  text-align: center;
+  background:
+    radial-gradient(
+      circle at 50% 35%,
+      rgba(124, 58, 237, 0.18),
+      transparent 38%
+    );
+}
 
-  font-size: clamp(48px, 8vw, 90px);
+.heroContent {
+  width: min(900px, 100%);
+}
 
+.hero h1 {
+  margin: 18px 0;
+  font-size: clamp(50px, 8vw, 95px);
+  line-height: 0.95;
+  letter-spacing: -5px;
+}
+
+.hero h1 span {
+  color: #a78bfa;
+}
+
+.heroText {
+  max-width: 650px;
+  margin: 25px auto;
+  color: #999;
+  font-size: 17px;
+}
+
+.heroButtons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
+
+
+/* =========================================================
+   SERVICES
+   ========================================================= */
+
+.servicesPage {
+  background: #070707;
+}
+
+.servicesHero,
+.pricingHero,
+.portfolioHero {
+  width: min(1100px, 90%);
+  margin: auto;
+  padding: 120px 0 90px;
+}
+
+.servicesHero h1,
+.pricingHero h1,
+.portfolioHero h1 {
+  margin: 18px 0;
+  font-size: clamp(48px, 7vw, 82px);
   line-height: 0.98;
   letter-spacing: -4px;
 }
 
-.servicesHero h1 span {
-  color: #7c5cff;
+.servicesHero h1 span,
+.pricingHero h1 span,
+.portfolioHero h1 span {
+  color: #a78bfa;
 }
 
-.servicesIntro {
-  max-width: 620px;
-
-  margin: 30px auto 0;
-
+.servicesHeroText,
+.pricingHeroText,
+.portfolioHeroText {
+  max-width: 650px;
   color: #888;
-
   font-size: 17px;
-  line-height: 1.7;
 }
 
-.servicesList {
-  max-width: 1200px;
-
+.servicesSection {
+  width: min(1100px, 90%);
   margin: auto;
+  padding: 80px 0 120px;
+}
 
-  padding: 80px 25px 120px;
+.servicesSectionHeader {
+  display: grid;
+  grid-template-columns: 1fr 0.7fr;
+  gap: 70px;
+  margin-bottom: 55px;
+}
+
+.servicesSectionHeader h2,
+.whyServicesHeader h2,
+.servicesProcessHeader h2 {
+  margin-top: 12px;
+  font-size: 45px;
+  line-height: 1.05;
+  letter-spacing: -2px;
+}
+
+.servicesSectionHeader > p {
+  align-self: end;
+  color: #777;
+  font-size: 15px;
 }
 
 .servicesGrid {
   display: grid;
-
   grid-template-columns: repeat(2, 1fr);
-
-  gap: 20px;
+  gap: 18px;
 }
 
 .serviceCard {
-  padding: 35px;
-
-  min-height: 300px;
-
-  background: #0d0d0d;
-
-  border: 1px solid #222;
-
-  border-radius: 16px;
-
-  display: flex;
-  flex-direction: column;
-
-  transition: 0.25s;
+  min-height: 310px;
+  padding: 30px;
+  border: 1px solid #202020;
+  border-radius: 14px;
+  background: #0b0b0b;
+  transition: 0.3s ease;
 }
 
 .serviceCard:hover {
-  border-color: #7c5cff;
-  transform: translateY(-5px);
+  border-color: #49377a;
+  transform: translateY(-4px);
 }
 
-.serviceTop {
+.serviceCardTop {
   display: flex;
-
   justify-content: space-between;
-
-  color: #7c5cff;
-
-  font-size: 14px;
-  font-weight: bold;
 }
 
-.serviceCard h2 {
-  margin-top: 55px;
-  font-size: 28px;
+.serviceNumber {
+  color: #a78bfa;
+  font-size: 13px;
+  font-weight: 700;
 }
 
-.serviceCard > p {
-  margin-top: 15px;
-  color: #888;
-  line-height: 1.6;
+.serviceArrow {
+  color: #555;
+  font-size: 22px;
 }
 
-.serviceBottom {
-  margin-top: auto;
-
-  padding-top: 30px;
-
-  display: flex;
-
-  align-items: center;
-  justify-content: space-between;
-
-  border-top: 1px solid #222;
+.serviceCard h3 {
+  margin: 45px 0 12px;
+  font-size: 25px;
 }
 
-.serviceBottom a {
-  color: #9b87ff;
+.serviceDescription {
+  color: #777;
   font-size: 14px;
 }
 
-.servicesCTA {
+.serviceFeatures {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 25px;
+}
+
+.serviceFeatures span {
+  padding: 6px 9px;
+  border: 1px solid #252525;
+  border-radius: 5px;
+  color: #999;
+  font-size: 11px;
+}
+
+.whyServices,
+.servicesProcess {
+  padding: 110px 5%;
+  border-top: 1px solid #171717;
+}
+
+.whyServicesHeader,
+.servicesProcessHeader {
+  width: min(1100px, 100%);
+  margin: auto;
+}
+
+.whyServicesHeader h2 span,
+.servicesProcessHeader h2 span {
+  color: #a78bfa;
+}
+
+.whyServicesGrid,
+.servicesProcessGrid {
+  width: min(1100px, 100%);
+  margin: 55px auto 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+.whyServiceItem,
+.servicesProcessItem {
+  padding: 25px;
+  border-top: 1px solid #333;
+}
+
+.whyServiceItem span,
+.servicesProcessItem span {
+  color: #a78bfa;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.whyServiceItem h3,
+.servicesProcessItem h3 {
+  margin: 35px 0 10px;
+  font-size: 19px;
+}
+
+.whyServiceItem p,
+.servicesProcessItem p {
+  color: #777;
+  font-size: 14px;
+}
+
+.servicesCTA,
+.pricingCTA,
+.portfolioCTA {
+  padding: 130px 20px;
   text-align: center;
-
-  padding: 120px 20px;
-
-  background: #0d0d0d;
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(124, 58, 237, 0.12),
+      transparent 45%
+    );
 }
 
-.servicesCTA h2 {
-  margin: 20px auto;
-
-  max-width: 700px;
-
-  font-size: clamp(40px, 6vw, 65px);
-
+.servicesCTA h2,
+.pricingCTA h2,
+.portfolioCTA h2 {
+  margin: 15px 0;
+  font-size: clamp(42px, 6vw, 68px);
   line-height: 1;
+  letter-spacing: -3px;
 }
 
-.servicesCTA h2 span {
-  color: #7c5cff;
+.servicesCTA > p:not(.sectionLabel),
+.pricingCTA > p:not(.sectionLabel),
+.portfolioCTA > p:not(.sectionLabel) {
+  max-width: 540px;
+  margin: 20px auto 28px;
+  color: #777;
 }
 
-.servicesCTA > p:not(.sectionLabel) {
-  max-width: 550px;
-
-  margin: 0 auto 30px;
-
-  color: #888;
-
-  line-height: 1.6;
+.servicesCTAButtons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 
 /* =========================================================
-   PRICING PAGE
-========================================================= */
+   PRICING
+   ========================================================= */
 
-.pricingHero {
-  text-align: center;
-
-  padding: 110px 20px 80px;
-
-  background: radial-gradient(
-    circle at center,
-    #17102d 0%,
-    #080808 60%
-  );
-}
-
-.pricingHero h1 {
-  margin-top: 20px;
-
-  font-size: clamp(48px, 8vw, 90px);
-
-  line-height: 0.98;
-  letter-spacing: -4px;
-}
-
-.pricingHero h1 span {
-  color: #7c5cff;
-}
-
-.pricingHero > p:not(.sectionLabel) {
-  max-width: 620px;
-
-  margin: 30px auto 0;
-
-  color: #888;
-
-  font-size: 17px;
-  line-height: 1.7;
-}
-
-.pricingCardsSection {
-  max-width: 1200px;
-
+.pricingSection {
+  width: min(1100px, 90%);
   margin: auto;
-
-  padding: 70px 25px 120px;
+  padding-bottom: 120px;
 }
 
-.pricingCards {
+.pricingGrid {
   display: grid;
-
   grid-template-columns: repeat(3, 1fr);
-
-  gap: 20px;
+  gap: 18px;
+  align-items: stretch;
 }
 
 .pricingCard {
   position: relative;
-
-  padding: 35px;
-
-  background: #0d0d0d;
-
-  border: 1px solid #222;
-  border-radius: 16px;
-
   display: flex;
   flex-direction: column;
-
-  transition: 0.25s;
+  padding: 30px;
+  border: 1px solid #222;
+  border-radius: 14px;
+  background: #0c0c0c;
 }
 
-.pricingCard:hover {
-  transform: translateY(-5px);
-  border-color: #444;
-}
-
-.popularPlan {
-  border-color: #7c5cff;
+.pricingFeatured {
+  border-color: #8b5cf6;
+  box-shadow: 0 0 45px rgba(124, 58, 237, 0.08);
 }
 
 .popularBadge {
   position: absolute;
-
-  top: -13px;
-  left: 50%;
-
-  transform: translateX(-50%);
-
-  padding: 6px 14px;
-
-  border-radius: 20px;
-
-  background: #7c5cff;
-  color: #fff;
-
-  font-size: 10px;
-  font-weight: bold;
-
+  top: 0;
+  right: 25px;
+  padding: 6px 10px;
+  border-radius: 0 0 6px 6px;
+  background: #a78bfa;
+  color: #090909;
+  font-size: 9px;
+  font-weight: 900;
   letter-spacing: 1px;
-  white-space: nowrap;
 }
 
-.pricingCardHeader p {
-  color: #9b87ff;
-
-  font-size: 14px;
-  font-weight: bold;
-
+.pricingPlanName {
+  color: #a78bfa;
+  font-size: 12px;
+  font-weight: 700;
   letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 .pricingCardHeader h2 {
-  margin-top: 15px;
-  font-size: 42px;
+  margin: 15px 0 8px;
+  font-size: 43px;
+  letter-spacing: -2px;
 }
 
-.pricingCardHeader span {
-  display: block;
-
-  margin-top: 12px;
-
+.pricingCardHeader > p:last-child {
   color: #777;
-
-  font-size: 14px;
-  line-height: 1.6;
+  min-height: 70px;
+  font-size: 13px;
 }
 
 .pricingFeatures {
-  margin-top: 35px;
-
-  padding-top: 25px;
-
-  border-top: 1px solid #222;
-
   display: flex;
   flex-direction: column;
-
-  gap: 15px;
+  gap: 13px;
+  margin: 30px 0;
+  padding-top: 25px;
+  border-top: 1px solid #202020;
 }
 
-.feature {
+.pricingFeature {
   display: flex;
   gap: 10px;
-
-  color: #aaa;
-  font-size: 14px;
+  align-items: flex-start;
 }
 
-.feature span {
-  color: #7c5cff;
-  font-weight: bold;
+.pricingFeature span {
+  color: #a78bfa;
+}
+
+.pricingFeature p {
+  color: #aaa;
+  font-size: 13px;
 }
 
 .pricingButton {
-  margin-top: 35px;
-
-  padding: 13px 20px;
-
-  text-align: center;
-
+  width: 100%;
+  margin-top: auto;
+  padding: 13px;
   border: 1px solid #333;
-  border-radius: 8px;
-
-  color: #fff;
-  font-size: 14px;
-}
-
-.popularPlan .pricingButton {
-  background: #7c5cff;
-  border-color: #7c5cff;
-}
-
-.pricingCTA {
+  border-radius: 7px;
   text-align: center;
-
-  padding: 120px 20px;
-
-  background: #0d0d0d;
+  font-size: 13px;
+  font-weight: 700;
+  transition: 0.2s ease;
 }
 
-.pricingCTA h2 {
-  margin: 20px auto;
+.pricingButton:hover {
+  border-color: #a78bfa;
+  background: #a78bfa;
+  color: #080808;
+}
 
-  max-width: 700px;
+.customPricing {
+  padding: 100px 5%;
+  border-top: 1px solid #171717;
+}
 
-  font-size: clamp(40px, 6vw, 65px);
+.customPricingContent {
+  width: min(1100px, 100%);
+  margin: auto;
+  padding: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 50px;
+  border: 1px solid #222;
+  border-radius: 15px;
+  background: #0c0c0c;
+}
 
+.customPricing h2 {
+  margin: 13px 0;
+  font-size: 43px;
   line-height: 1;
+  letter-spacing: -2px;
 }
 
-.pricingCTA h2 span {
-  color: #7c5cff;
+.customPricingContent > div > p:last-child {
+  max-width: 560px;
+  color: #777;
 }
 
-.pricingCTA > p:not(.sectionLabel) {
-  max-width: 550px;
+.pricingFAQ {
+  width: min(1100px, 90%);
+  margin: auto;
+  padding: 100px 0;
+}
 
-  margin: 0 auto 30px;
+.pricingFAQHeader h2 {
+  margin-top: 12px;
+  font-size: 42px;
+  letter-spacing: -2px;
+}
 
-  color: #888;
+.faqGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 45px;
+}
 
-  line-height: 1.6;
+.faqItem {
+  padding: 28px;
+  border: 1px solid #202020;
+  border-radius: 12px;
+}
+
+.faqItem h3 {
+  margin-bottom: 10px;
+  font-size: 17px;
+}
+
+.faqItem p {
+  color: #777;
+  font-size: 13px;
 }
 
 
 /* =========================================================
-   PORTFOLIO PAGE
-========================================================= */
+   PORTFOLIO
+   ========================================================= */
 
-.portfolioHero {
-  text-align: center;
-
-  padding: 110px 20px 80px;
-
-  background: radial-gradient(
-    circle at center,
-    #17102d 0%,
-    #080808 60%
-  );
-}
-
-.portfolioHero h1 {
-  margin-top: 20px;
-
-  font-size: clamp(48px, 8vw, 90px);
-
-  line-height: 0.98;
-  letter-spacing: -4px;
-}
-
-.portfolioHero h1 span {
-  color: #7c5cff;
-}
-
-.portfolioHero > p:not(.sectionLabel) {
-  max-width: 620px;
-
-  margin: 30px auto 0;
-
-  color: #888;
-
-  font-size: 17px;
-  line-height: 1.7;
-}
-
-.portfolioList {
-  max-width: 1200px;
-
+.portfolioSection {
+  width: min(1100px, 90%);
   margin: auto;
+  padding-bottom: 120px;
+}
 
-  padding: 80px 25px 120px;
+.portfolioSectionHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 50px;
+  margin-bottom: 50px;
+}
+
+.portfolioSectionHeader h2 {
+  margin-top: 10px;
+  font-size: 43px;
+  letter-spacing: -2px;
+}
+
+.portfolioSectionHeader > p {
+  max-width: 360px;
+  align-self: end;
+  color: #777;
 }
 
 .portfolioGrid {
   display: grid;
-
   grid-template-columns: repeat(2, 1fr);
-
-  gap: 25px;
+  gap: 20px;
 }
 
 .portfolioCard {
-  background: #0d0d0d;
-
-  border: 1px solid #222;
-  border-radius: 16px;
-
   overflow: hidden;
-
-  transition: 0.25s;
+  border: 1px solid #202020;
+  border-radius: 14px;
+  background: #0c0c0c;
 }
 
-.portfolioCard:hover {
-  transform: translateY(-5px);
-  border-color: #7c5cff;
-}
-
-.portfolioImage {
-  height: 300px;
-
+.portfolioVisual {
   position: relative;
-
-  padding: 25px;
-
-  background: radial-gradient(
-    circle at center,
-    #24164d 0%,
-    #111 55%,
-    #080808 100%
-  );
-
+  min-height: 280px;
   display: flex;
-
   align-items: center;
   justify-content: center;
+  background:
+    linear-gradient(
+      135deg,
+      #101010,
+      #17111f
+    );
 }
 
-.projectNumber {
+.portfolioNumber {
   position: absolute;
-
-  top: 20px;
-  left: 22px;
-
-  color: #7c5cff;
-
-  font-size: 13px;
-  font-weight: bold;
-}
-
-.projectCategory {
-  position: absolute;
-
-  top: 20px;
-  right: 22px;
-
-  color: #888;
-
+  top: 18px;
+  left: 20px;
+  color: #a78bfa;
   font-size: 12px;
-
-  border: 1px solid #333;
-
-  padding: 6px 10px;
-
-  border-radius: 20px;
+  font-weight: 700;
 }
 
-.projectMockup {
-  width: 75%;
-  height: 65%;
+.portfolioMockup {
+  width: 70%;
+  border: 1px solid #303030;
+  border-radius: 7px;
+  background: #090909;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+}
 
-  border: 1px solid #444;
-  border-radius: 10px;
-
-  background: #0b0b0b;
-
+.mockupTop {
   display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-}
-
-.projectMockup span {
-  color: #7c5cff;
-
-  font-size: 18px;
-  font-weight: bold;
-
-  letter-spacing: 2px;
-}
-
-.portfolioContent {
-  padding: 30px;
-}
-
-.portfolioContent h2 {
-  font-size: 25px;
-  margin-bottom: 12px;
-}
-
-.portfolioContent p {
-  color: #888;
-
-  font-size: 14px;
-  line-height: 1.7;
-
-  margin-bottom: 20px;
-}
-
-.portfolioContent a {
-  color: #9b87ff;
-  font-size: 14px;
-}
-
-.portfolioCTA {
-  text-align: center;
-
-  padding: 120px 20px;
-
-  background: #0d0d0d;
-}
-
-.portfolioCTA h2 {
-  margin: 20px auto;
-
-  max-width: 700px;
-
-  font-size: clamp(40px, 6vw, 65px);
-
-  line-height: 1;
-}
-
-.portfolioCTA h2 span {
-  color: #7c5cff;
-}
-
-.portfolioCTA > p:not(.sectionLabel) {
-  max-width: 550px;
-
-  margin: 0 auto 30px;
-
-  color: #888;
-
-  line-height: 1.6;
-}
-
-
-/* =========================================================
-   CONTACT PAGE
-========================================================= */
-
-.contactHero {
-  text-align: center;
-
-  padding: 110px 20px 80px;
-
-  background: radial-gradient(
-    circle at center,
-    #17102d 0%,
-    #080808 60%
-  );
-}
-
-.contactHero h1 {
-  margin-top: 20px;
-
-  font-size: clamp(48px, 8vw, 90px);
-
-  line-height: 0.98;
-  letter-spacing: -4px;
-}
-
-.contactHero h1 span {
-  color: #7c5cff;
-}
-
-.contactHero > p:not(.sectionLabel) {
-  max-width: 620px;
-
-  margin: 30px auto 0;
-
-  color: #888;
-
-  font-size: 17px;
-  line-height: 1.7;
-}
-
-
-/* =========================================================
-   CONTACT SECTION
-========================================================= */
-
-.contactSection {
-  padding: 100px 25px 120px;
-}
-
-.contactContainer {
-  max-width: 1150px;
-
-  margin: auto;
-
-  display: grid;
-
-  grid-template-columns: 0.9fr 1.1fr;
-
-  gap: 70px;
-
-  align-items: start;
-}
-
-
-/* =========================================================
-   CONTACT INFO
-========================================================= */
-
-.contactInfo h2 {
-  margin-top: 20px;
-
-  font-size: clamp(40px, 5vw, 60px);
-
-  line-height: 1;
-}
-
-.contactInfo h2 span {
-  color: #7c5cff;
-}
-
-.contactDescription {
-  max-width: 500px;
-
-  margin-top: 25px;
-
-  color: #888;
-
-  line-height: 1.7;
-
-  font-size: 15px;
-}
-
-.contactDetails {
-  margin-top: 45px;
-
-  display: flex;
-
-  flex-direction: column;
-
-  gap: 25px;
-}
-
-.contactDetail {
-  padding-bottom: 20px;
-
+  gap: 5px;
+  padding: 8px;
   border-bottom: 1px solid #222;
 }
 
-.contactDetail span {
-  color: #777;
-
-  font-size: 12px;
-
-  text-transform: uppercase;
-
-  letter-spacing: 1px;
+.mockupTop span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #555;
 }
 
-.contactDetail p {
-  margin-top: 7px;
+.mockupContent {
+  padding: 25px;
+}
 
-  color: #fff;
+.mockupLine {
+  width: 65%;
+  height: 7px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  background: #282828;
+}
 
-  font-size: 14px;
+.mockupLine.large {
+  width: 80%;
+  height: 13px;
+}
+
+.mockupLine.short {
+  width: 45%;
+}
+
+.mockupBlocks {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 25px;
+}
+
+.mockupBlocks span {
+  height: 55px;
+  border-radius: 4px;
+  background: #1b1b1b;
+}
+
+.portfolioCardContent {
+  padding: 28px;
+}
+
+.portfolioCategory {
+  color: #a78bfa;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.portfolioCardContent h3 {
+  margin: 8px 0;
+  font-size: 25px;
+}
+
+.portfolioCardContent > p {
+  color: #777;
+  font-size: 13px;
+}
+
+.portfolioTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 20px;
+}
+
+.portfolioTags span {
+  padding: 5px 8px;
+  border: 1px solid #292929;
+  border-radius: 5px;
+  color: #888;
+  font-size: 10px;
+}
+
+.portfolioProcess {
+  padding: 110px 5%;
+  border-top: 1px solid #171717;
+}
+
+.portfolioProcessHeader {
+  width: min(1100px, 100%);
+  margin: auto;
+}
+
+.portfolioProcessHeader h2 span {
+  color: #a78bfa;
+}
+
+.processGrid {
+  width: min(1100px, 100%);
+  margin: 55px auto 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+.processItem {
+  padding: 25px;
+  border-top: 1px solid #333;
+}
+
+.processItem span {
+  color: #a78bfa;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.processItem h3 {
+  margin: 30px 0 10px;
+}
+
+.processItem p {
+  color: #777;
+  font-size: 13px;
 }
 
 
 /* =========================================================
-   CONTACT FORM
-========================================================= */
+   CONTACT
+   ========================================================= */
 
-.contactFormBox {
+.contactPage {
+  background: #070707;
+}
+
+.contactHero {
+  padding: 110px 5% 80px;
+  border-bottom: 1px solid #171717;
+}
+
+.contactHeroContent {
+  width: min(1100px, 100%);
+  margin: auto;
+}
+
+.contactHero h1 {
+  margin: 15px 0;
+  font-size: clamp(50px, 7vw, 78px);
+  line-height: 1;
+  letter-spacing: -4px;
+}
+
+.contactHeroText {
+  max-width: 600px;
+  color: #777;
+}
+
+.contactSection {
+  width: min(1100px, 90%);
+  margin: auto;
+  padding: 90px 0;
+  display: grid;
+  grid-template-columns: 0.7fr 1.3fr;
+  gap: 80px;
+}
+
+.contactInfo h2 {
+  margin: 10px 0 20px;
+  font-size: 38px;
+  letter-spacing: -2px;
+}
+
+.contactDetails {
+  margin-top: 40px;
+}
+
+.contactDetail {
+  padding: 18px 0;
+  border-bottom: 1px solid #202020;
+}
+
+.contactDetail span {
+  display: block;
+  margin-bottom: 5px;
+  color: #a78bfa;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.contactDetail p {
+  color: #aaa;
+  font-size: 14px;
+}
+
+.contactFormWrapper {
   padding: 35px;
-
-  background: #0d0d0d;
-
   border: 1px solid #222;
-
-  border-radius: 16px;
+  border-radius: 14px;
+  background: #0c0c0c;
 }
 
 .contactForm {
   display: flex;
-
   flex-direction: column;
-
-  gap: 20px;
+  gap: 18px;
 }
 
 .formRow {
   display: grid;
-
   grid-template-columns: 1fr 1fr;
-
   gap: 15px;
 }
 
-.contactForm select,
 .contactForm textarea {
-  width: 100%;
-
-  padding: 14px;
-
-  background: #090909;
-
-  color: #fff;
-
-  border: 1px solid #292929;
-
-  border-radius: 9px;
-
-  outline: none;
-
-  font-family: inherit;
-
-  font-size: 14px;
-}
-
-.contactForm select {
-  height: 48px;
-}
-
-.contactForm textarea {
+  min-height: 150px;
   resize: vertical;
-
-  min-height: 140px;
 }
 
-.contactForm select:focus,
-.contactForm textarea:focus {
-  border-color: #7c5cff;
-
-  box-shadow:
-    0 0 0 3px rgba(124, 92, 255, 0.1);
+.contactSubmit {
+  padding: 14px;
+  border: 1px solid #a78bfa;
+  border-radius: 8px;
+  background: #a78bfa;
+  color: #080808;
+  font-weight: 800;
 }
 
-.contactForm select option {
-  background: #111;
-  color: #fff;
+.contactSubmit:hover {
+  background: #c4b5fd;
 }
 
-.contactButton {
-  width: 100%;
-
-  height: 50px;
-
-  border: none;
-  border-radius: 9px;
-
-  background: #7c5cff;
-  color: #fff;
-
-  font-size: 14px;
-  font-weight: 600;
-
-  cursor: pointer;
-
-  transition: 0.2s;
+.contactSuccess,
+.contactError {
+  padding: 12px 14px;
+  border-radius: 7px;
+  font-size: 13px;
 }
 
-.contactButton:hover {
-  background: #8b70ff;
-  transform: translateY(-1px);
+.contactSuccess {
+  border: 1px solid #254d35;
+  background: #0d2115;
+  color: #86efac;
 }
 
-
-/* =========================================================
-   CONTACT CTA
-========================================================= */
+.contactError {
+  border: 1px solid #512525;
+  background: #220d0d;
+  color: #fca5a5;
+}
 
 .contactCTA {
+  padding: 90px 20px;
   text-align: center;
-
-  padding: 120px 20px;
-
-  background: #0d0d0d;
-}
-
-.contactCTA h2 {
-  max-width: 700px;
-
-  margin: 20px auto 30px;
-
-  font-size: clamp(40px, 6vw, 65px);
-
-  line-height: 1;
-}
-
-.contactCTA h2 span {
-  color: #7c5cff;
+  border-top: 1px solid #171717;
 }
 
 
 /* =========================================================
    DASHBOARD
-========================================================= */
+   ========================================================= */
 
 .dashboardPage {
-  min-height: calc(100vh - 75px);
-
-  padding: 90px 7% 120px;
-
-  background:
-    radial-gradient(
-      circle at 20% 10%,
-      #17102d 0%,
-      #080808 35%
-    );
-}
-
-.dashboardHero {
-  max-width: 1200px;
-
-  margin: 0 auto 60px;
-}
-
-.dashboardHero h1 {
-  margin-top: 15px;
-
-  font-size: clamp(45px, 7vw, 75px);
-
-  line-height: 0.95;
-
-  letter-spacing: -4px;
-}
-
-.dashboardHero h1 span {
-  color: #7c5cff;
-}
-
-.dashboardHero > p:not(.sectionLabel) {
-  margin-top: 20px;
-
-  color: #888;
-
-  font-size: 16px;
-}
-
-.dashboardGrid {
-  max-width: 1200px;
-
+  width: min(1180px, 92%);
   margin: auto;
-
-  display: grid;
-
-  grid-template-columns: repeat(2, 1fr);
-
-  gap: 20px;
+  padding: 55px 0 100px;
 }
 
-.dashboardCard {
-  padding: 35px;
-
-  min-height: 220px;
-
-  background: #0d0d0d;
-
-  border: 1px solid #222;
-
-  border-radius: 16px;
-
-  transition: 0.25s;
-}
-
-.dashboardCard:hover {
-  transform: translateY(-5px);
-
-  border-color: #7c5cff;
-}
-
-.dashboardCard > span {
-  color: #7c5cff;
-
-  font-size: 13px;
-
-  font-weight: bold;
-}
-
-.dashboardCard h2 {
-  margin-top: 45px;
-
-  font-size: 27px;
-}
-
-.dashboardCard p {
-  margin-top: 12px;
-
-  color: #888;
-
-  line-height: 1.6;
-}
-
-
-/* =========================================================
-   ADMIN CUSTOMERS
-========================================================= */
-
-.adminCustomersPage {
-  min-height: calc(100vh - 75px);
-
-  padding: 90px 7% 120px;
-
-  background:
-    radial-gradient(
-      circle at 20% 10%,
-      #17102d 0%,
-      #080808 35%
-    );
-}
-
-.customersHeader {
-  max-width: 1200px;
-
-  margin: 0 auto 50px;
-
+.dashboardHeader {
   display: flex;
-
+  justify-content: space-between;
   align-items: flex-end;
-
-  justify-content: space-between;
-
-  gap: 30px;
+  gap: 25px;
+  margin-bottom: 35px;
 }
 
-.customersHeader h1 {
-  margin-top: 15px;
-
-  font-size: clamp(45px, 7vw, 75px);
-
-  line-height: 0.95;
-
-  letter-spacing: -4px;
+.dashboardHeader h1 {
+  margin-top: 8px;
+  font-size: 38px;
+  letter-spacing: -2px;
 }
 
-.customersSubtitle {
-  margin-top: 18px;
-
-  color: #888;
-
-  font-size: 16px;
-
-  line-height: 1.6;
+.dashboardHeader p {
+  color: #777;
+  font-size: 13px;
 }
 
-.backButton {
-  display: inline-block;
-
-  padding: 12px 20px;
-
-  border: 1px solid #333;
-
-  border-radius: 8px;
-
-  color: #fff;
-
-  font-size: 14px;
-
-  transition: 0.2s;
-}
-
-.backButton:hover {
-  background: #7c5cff;
-
-  border-color: #7c5cff;
-}
-
-.customerStats {
-  max-width: 1200px;
-
-  margin: 0 auto 25px;
-
+.dashboardStats {
   display: grid;
-
-  grid-template-columns: repeat(3, 1fr);
-
-  gap: 18px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  margin-bottom: 35px;
 }
 
-.customerStatCard {
-  padding: 25px;
-
-  background: #0d0d0d;
-
+.dashboardStatCard {
+  padding: 22px;
   border: 1px solid #222;
-
-  border-radius: 12px;
+  border-radius: 10px;
+  background: #0c0c0c;
 }
 
-.customerStatCard span {
-  display: block;
-
-  margin-bottom: 12px;
-
+.dashboardStatCard span {
   color: #777;
-
-  font-size: 13px;
-}
-
-.customerStatCard strong {
-  color: #fff;
-
-  font-size: 30px;
-}
-
-.customersTableContainer {
-  max-width: 1200px;
-
-  margin: auto;
-
-  background: #0d0d0d;
-
-  border: 1px solid #222;
-
-  border-radius: 14px;
-
-  overflow: hidden;
-}
-
-.tableHeader {
-  padding: 25px 30px;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: space-between;
-
-  border-bottom: 1px solid #222;
-}
-
-.tableHeader h2 {
-  margin: 0;
-
-  font-size: 22px;
-}
-
-.tableHeader span {
-  color: #777;
-
-  font-size: 13px;
-}
-
-.tableWrapper {
-  width: 100%;
-
-  overflow-x: auto;
-}
-
-.customersTable {
-  width: 100%;
-
-  border-collapse: collapse;
-
-  min-width: 850px;
-}
-
-.customersTable th {
-  padding: 16px 20px;
-
-  text-align: left;
-
-  background: #101010;
-
-  border-bottom: 1px solid #222;
-
-  color: #777;
-
-  font-size: 12px;
-
-  font-weight: 600;
-
+  font-size: 11px;
   text-transform: uppercase;
-
   letter-spacing: 1px;
 }
 
-.customersTable td {
-  padding: 18px 20px;
-
-  border-bottom: 1px solid #1c1c1c;
-
-  color: #ccc;
-
-  font-size: 14px;
+.dashboardStatCard h3 {
+  margin-top: 8px;
+  font-size: 28px;
 }
 
-.customersTable tbody tr {
-  transition: 0.2s;
+.dashboardGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
 }
 
-.customersTable tbody tr:hover {
-  background: #121212;
+.dashboardCard {
+  padding: 25px;
+  border: 1px solid #222;
+  border-radius: 11px;
+  background: #0c0c0c;
+  transition: 0.2s ease;
 }
 
-.customersTable tbody tr:last-child td {
-  border-bottom: none;
+.dashboardCard:hover {
+  border-color: #49377a;
+  transform: translateY(-2px);
 }
 
-.customerName {
+.dashboardCard h3 {
+  margin-bottom: 7px;
+}
+
+.dashboardCard p {
+  color: #777;
+  font-size: 13px;
+}
+
+.dashboardTextLink {
+  display: inline-block;
+  margin-top: 18px;
+  color: #a78bfa;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.dashboardSection {
+  margin-top: 40px;
+}
+
+.dashboardSectionHeader {
   display: flex;
-
+  justify-content: space-between;
   align-items: center;
-
-  gap: 12px;
+  margin-bottom: 18px;
 }
 
-.customerAvatar {
-  width: 38px;
-  height: 38px;
+.dashboardSectionHeader h2 {
+  font-size: 22px;
+}
 
-  flex-shrink: 0;
+.dashboardEmpty {
+  padding: 45px;
+  border: 1px dashed #292929;
+  border-radius: 12px;
+  color: #666;
+  text-align: center;
+}
 
+.recentProjects {
   display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
 
-  align-items: center;
-  justify-content: center;
+.recentProjectCard {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px;
+  border: 1px solid #202020;
+  border-radius: 9px;
+  background: #0b0b0b;
+}
 
-  border-radius: 50%;
+.recentProjectRight {
+  text-align: right;
+}
 
-  background: #7c5cff;
 
-  color: #fff;
+/* =========================================================
+   STATUS BADGES
+   ========================================================= */
 
-  font-size: 14px;
-
+.statusBadge {
+  display: inline-flex;
+  padding: 5px 9px;
+  border: 1px solid #333;
+  border-radius: 5px;
+  color: #aaa;
+  background: #151515;
+  font-size: 10px;
   font-weight: 700;
 }
 
-.customerName strong {
-  color: #fff;
 
-  font-size: 14px;
+/* =========================================================
+   PROJECTS
+   ========================================================= */
+
+.projectGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
 }
 
-.userId {
-  display: inline-block;
+.projectCard {
+  padding: 25px;
+  border: 1px solid #222;
+  border-radius: 12px;
+  background: #0c0c0c;
+}
 
-  max-width: 180px;
+.projectCardTop {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+}
 
-  overflow: hidden;
+.projectInfo h3 {
+  font-size: 21px;
+}
 
-  text-overflow: ellipsis;
-
-  white-space: nowrap;
-
+.projectInfo p {
   color: #777;
-
-  font-family: monospace;
-
   font-size: 12px;
 }
 
-.customersMessage {
-  padding: 70px 25px;
-
-  text-align: center;
-
-  color: #777;
-
-  font-size: 15px;
+.progressBar {
+  width: 100%;
+  height: 6px;
+  margin: 22px 0 10px;
+  overflow: hidden;
+  border-radius: 5px;
+  background: #202020;
 }
 
-.customersError {
-  margin: 25px;
+.progressFill {
+  height: 100%;
+  border-radius: inherit;
+  background: #a78bfa;
+}
 
-  padding: 16px;
+.projectDescription {
+  color: #888;
+  font-size: 13px;
+}
 
-  border: 1px solid #442222;
+.projectFooter {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  margin-top: 22px;
+  padding-top: 15px;
+  border-top: 1px solid #202020;
+  color: #666;
+  font-size: 11px;
+}
 
+
+/* =========================================================
+   NEW PROJECT
+   ========================================================= */
+
+.newProjectLayout {
+  display: grid;
+  grid-template-columns: 0.75fr 1.25fr;
+  gap: 25px;
+}
+
+.projectPackages {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.packageOption {
+  display: block;
+  padding: 20px;
+  border: 1px solid #242424;
+  border-radius: 10px;
+  background: #0c0c0c;
+  cursor: pointer;
+}
+
+.packageOption:hover {
+  border-color: #555;
+}
+
+.packageOption input {
+  margin-right: 8px;
+  accent-color: #a78bfa;
+}
+
+.selectedPackage {
+  margin-top: 15px;
+  padding: 13px;
+  border: 1px solid #392b60;
   border-radius: 8px;
+  color: #c4b5fd;
+  background: #130f1c;
+  font-size: 13px;
+}
 
-  background: #180c0c;
+.newProjectFormWrapper {
+  padding: 30px;
+  border: 1px solid #222;
+  border-radius: 12px;
+  background: #0c0c0c;
+}
 
-  color: #ff7777;
+.dashboardForm {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
 
+
+/* =========================================================
+   MESSAGES
+   ========================================================= */
+
+.messagesList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.messageCard {
+  padding: 22px;
+  border: 1px solid #222;
+  border-radius: 10px;
+  background: #0c0c0c;
+}
+
+.messageCardTop {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.messageText {
+  margin-top: 15px;
+  color: #999;
+  font-size: 14px;
+}
+
+.messageDate {
+  margin-top: 15px;
+  color: #555;
+  font-size: 11px;
+}
+
+
+/* =========================================================
+   TABLES
+   ========================================================= */
+
+.dashboardTableWrapper,
+.adminTableWrapper {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid #222;
+  border-radius: 12px;
+  background: #0c0c0c;
+}
+
+.dashboardTable,
+.adminTable {
+  width: 100%;
+  min-width: 700px;
+  border-collapse: collapse;
+}
+
+.dashboardTable th,
+.dashboardTable td,
+.adminTable th,
+.adminTable td {
+  padding: 15px 18px;
+  border-bottom: 1px solid #1e1e1e;
+  text-align: left;
+  white-space: nowrap;
+  font-size: 12px;
+}
+
+.dashboardTable th,
+.adminTable th {
+  color: #777;
+  background: #101010;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.dashboardTable td,
+.adminTable td {
+  color: #aaa;
+}
+
+.dashboardTable tr:last-child td,
+.adminTable tr:last-child td {
+  border-bottom: 0;
+}
+
+.tableId {
+  color: #a78bfa !important;
+  font-family: monospace;
+}
+
+.messageCell {
+  max-width: 350px;
+  overflow: hidden;
+  color: #888 !important;
+  text-overflow: ellipsis;
+}
+
+
+/* =========================================================
+   ADMIN
+   ========================================================= */
+
+.adminPage {
+  width: min(1180px, 92%);
+  margin: auto;
+  padding: 55px 0 100px;
+}
+
+.adminHeader {
+  margin-bottom: 35px;
+}
+
+.adminHeader h1 {
+  margin-top: 8px;
+  font-size: 38px;
+  letter-spacing: -2px;
+}
+
+.adminHeader p {
+  color: #777;
+  font-size: 13px;
+}
+
+.adminStats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.adminStatCard {
+  padding: 22px;
+  border: 1px solid #222;
+  border-radius: 10px;
+  background: #0c0c0c;
+}
+
+.adminStatCard span {
+  color: #777;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+.adminStatCard h2 {
+  margin-top: 7px;
+  font-size: 29px;
+}
+
+.adminGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+
+.adminCard {
+  padding: 28px;
+  border: 1px solid #222;
+  border-radius: 12px;
+  background: #0c0c0c;
+}
+
+.adminCard h3 {
+  margin-bottom: 8px;
+}
+
+.adminCard p {
+  color: #777;
+  font-size: 13px;
+}
+
+.adminEmpty {
+  padding: 45px;
+  border: 1px dashed #292929;
+  border-radius: 10px;
+  color: #666;
   text-align: center;
 }
 
 
 /* =========================================================
-   TABLET
-========================================================= */
+   PROFILE
+   ========================================================= */
+
+.profileLayout {
+  display: grid;
+  grid-template-columns: 0.65fr 1.35fr;
+  gap: 20px;
+}
+
+.profileCard {
+  padding: 30px;
+  border: 1px solid #222;
+  border-radius: 12px;
+  background: #0c0c0c;
+  text-align: center;
+}
+
+.profileAvatar {
+  width: 75px;
+  height: 75px;
+  margin: 0 auto 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #a78bfa;
+  color: #080808;
+  font-size: 27px;
+  font-weight: 900;
+}
+
+.profileCard h2 {
+  font-size: 21px;
+}
+
+.profileCard p {
+  color: #777;
+  font-size: 13px;
+}
+
+.profileFormWrapper {
+  padding: 30px;
+  border: 1px solid #222;
+  border-radius: 12px;
+  background: #0c0c0c;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.footer {
+  border-top: 1px solid #1b1b1b;
+  background: #050505;
+}
+
+.footerContainer {
+  width: min(1180px, 92%);
+  margin: auto;
+  padding: 55px 0 25px;
+}
+
+.footerTop {
+  display: flex;
+  justify-content: space-between;
+  gap: 50px;
+}
+
+.footerBrand {
+  max-width: 350px;
+}
+
+.footerBrand h2 {
+  font-size: 22px;
+}
+
+.footerBrand p {
+  margin-top: 12px;
+  color: #666;
+  font-size: 13px;
+}
+
+.footerLinks {
+  display: flex;
+  gap: 50px;
+}
+
+.footerLinks h4 {
+  margin-bottom: 12px;
+  color: #aaa;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.footerLinks a {
+  display: block;
+  margin-bottom: 7px;
+  color: #666;
+  font-size: 13px;
+}
+
+.footerLinks a:hover {
+  color: #fff;
+}
+
+.footerBottom {
+  margin-top: 45px;
+  padding-top: 20px;
+  border-top: 1px solid #1b1b1b;
+  color: #555;
+  font-size: 11px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
 
 @media (max-width: 900px) {
-
-  .pricingCards {
-    grid-template-columns: 1fr;
-
-    max-width: 550px;
-
-    margin: auto;
-  }
-
-  .contactContainer {
-    grid-template-columns: 1fr;
-
-    gap: 50px;
-  }
-
-}
-
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media (max-width: 768px) {
 
   .navLinks {
     display: none;
   }
 
-  .hero h1 {
-    letter-spacing: -3px;
-  }
-
-  .heroButtons {
-    flex-direction: column;
-
-    align-items: center;
-  }
-
-  .serviceGrid {
+  .servicesSectionHeader,
+  .contactSection,
+  .newProjectLayout,
+  .profileLayout {
     grid-template-columns: 1fr;
   }
 
-  .servicesGrid {
+  .servicesGrid,
+  .portfolioGrid,
+  .projectGrid {
     grid-template-columns: 1fr;
   }
 
-  .portfolioGrid {
+  .whyServicesGrid,
+  .servicesProcessGrid,
+  .processGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .pricingGrid {
     grid-template-columns: 1fr;
   }
 
-  .sectionHeading h2,
-  .pricingPreview h2,
-  .ctaSection h2 {
-    font-size: 38px;
-  }
-
-  .servicesHero h1,
-  .portfolioHero h1,
-  .contactHero h1 {
-    letter-spacing: -2px;
-  }
-
-  .serviceCard {
-    min-height: 280px;
-  }
-
-  .serviceCard h2 {
-    margin-top: 40px;
-  }
-
-  .portfolioImage {
-    height: 260px;
-  }
-
-  .footerContainer {
-    grid-template-columns: 1fr;
-  }
-
-
-  /* Dashboard */
-
-  .dashboardPage {
-    padding: 60px 20px 90px;
-  }
-
-  .dashboardHero h1 {
-    font-size: 50px;
-
-    letter-spacing: -3px;
+  .dashboardStats {
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .dashboardGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .adminStats {
     grid-template-columns: 1fr;
   }
 
-
-  /* Admin */
-
-  .adminCustomersPage {
-    padding: 60px 20px 90px;
+  .adminGrid {
+    grid-template-columns: 1fr;
   }
 
-  .customersHeader {
-    align-items: flex-start;
-
+  .customPricingContent {
     flex-direction: column;
-
-    margin-bottom: 35px;
-  }
-
-  .customersHeader h1 {
-    font-size: 50px;
-
-    letter-spacing: -3px;
-  }
-
-  .backButton {
-    width: 100%;
-
-    text-align: center;
-  }
-
-  .customerStats {
-    grid-template-columns: 1fr;
-
-    gap: 12px;
-  }
-
-  .customerStatCard {
-    padding: 20px;
-  }
-
-  .tableHeader {
-    padding: 20px;
-  }
-
-  .customersTable {
-    min-width: 850px;
-  }
-
-}
-
-
-/* =========================================================
-   SMALL MOBILE
-========================================================= */
-
-@media (max-width: 600px) {
-
-  .authPage {
-    padding: 40px 15px;
-  }
-
-  .authBox {
-    padding: 30px 22px;
-
-    border-radius: 14px;
-  }
-
-  .authHeader h1 {
-    font-size: 29px;
-  }
-
-  .pricingHero h1,
-  .portfolioHero h1,
-  .contactHero h1 {
-    letter-spacing: -2px;
-  }
-
-  .pricingCard {
-    padding: 28px;
-  }
-
-  .pricingCardsSection {
-    padding-left: 15px;
-    padding-right: 15px;
-  }
-
-  .portfolioList {
-    padding-left: 15px;
-    padding-right: 15px;
-  }
-
-  .portfolioImage {
-    height: 230px;
-  }
-
-  .portfolioContent {
-    padding: 25px;
-  }
-
-  .pricingCTA,
-  .portfolioCTA,
-  .contactCTA {
-    padding: 90px 20px;
+    align-items: flex-start;
   }
 
   .contactSection {
-    padding-left: 15px;
-    padding-right: 15px;
+    gap: 40px;
   }
 
-  .contactFormBox {
-    padding: 25px 20px;
+  .portfolioSectionHeader {
+    flex-direction: column;
   }
-
-  .formRow {
-    grid-template-columns: 1fr;
-  }
-
 }
 
 
-/* =========================================================
-   EXTRA SMALL MOBILE
-========================================================= */
-
-@media (max-width: 400px) {
+@media (max-width: 600px) {
 
   .navContainer {
-    padding: 0 15px;
-  }
-
-  .logo {
-    font-size: 21px;
+    min-height: 68px;
   }
 
   .navButtons {
     gap: 5px;
   }
 
-  .loginButton {
+  .loginButton,
+  .signupButton {
     padding: 8px 10px;
+    font-size: 11px;
   }
 
-  .signupButton {
-    padding: 10px 12px;
+  .authCard {
+    padding: 28px 20px;
+  }
 
-    font-size: 13px;
+  .authHeader h1 {
+    font-size: 29px;
   }
 
   .hero {
-    padding-left: 15px;
-    padding-right: 15px;
+    min-height: 600px;
+    padding: 80px 20px;
   }
 
   .hero h1 {
+    letter-spacing: -3px;
+  }
+
+  .servicesHero,
+  .pricingHero,
+  .portfolioHero {
+    padding: 80px 0 60px;
+  }
+
+  .servicesHero h1,
+  .pricingHero h1,
+  .portfolioHero h1 {
     font-size: 48px;
+    letter-spacing: -3px;
   }
 
-  .heroDescription {
-    font-size: 16px;
+  .servicesSectionHeader h2,
+  .whyServicesHeader h2,
+  .servicesProcessHeader h2,
+  .pricingFAQHeader h2 {
+    font-size: 35px;
   }
 
-  .authBox {
-    padding: 25px 18px;
+  .servicesGrid {
+    grid-template-columns: 1fr;
   }
 
-  .contactFormBox {
-    padding: 20px 15px;
+  .whyServicesGrid,
+  .servicesProcessGrid,
+  .processGrid {
+    grid-template-columns: 1fr;
   }
 
-  .dashboardHero h1 {
-    font-size: 43px;
+  .dashboardPage,
+  .adminPage {
+    padding-top: 35px;
   }
 
-  .customersHeader h1 {
-    font-size: 43px;
+  .dashboardHeader {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
+  .dashboardHeader h1,
+  .adminHeader h1 {
+    font-size: 30px;
+  }
+
+  .dashboardStats {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .dashboardGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .recentProjectCard {
+    flex-direction: column;
+  }
+
+  .recentProjectRight {
+    text-align: left;
+  }
+
+  .formRow {
+    grid-template-columns: 1fr;
+  }
+
+  .contactFormWrapper,
+  .newProjectFormWrapper,
+  .profileFormWrapper {
+    padding: 22px;
+  }
+
+  .contactHero h1 {
+    font-size: 50px;
+    letter-spacing: -3px;
+  }
+
+  .customPricing {
+    padding: 60px 5%;
+  }
+
+  .customPricingContent {
+    padding: 30px;
+  }
+
+  .customPricing h2 {
+    font-size: 35px;
+  }
+
+  .faqGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .portfolioVisual {
+    min-height: 220px;
+  }
+
+  .portfolioMockup {
+    width: 80%;
+  }
+
+  .footerTop {
+    flex-direction: column;
+  }
+
+  .footerLinks {
+    gap: 30px;
+  }
+
+  .footerContainer {
+    padding-top: 40px;
+  }
 }

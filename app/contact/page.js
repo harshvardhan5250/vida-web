@@ -1,206 +1,252 @@
-import Link from "next/link";
+"use client";
+
+import { useState } from "react";
 
 export default function ContactPage() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
+
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState("");
+  const [error, setError] = useState("");
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    setLoading(true);
+    setSuccess("");
+    setError("");
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.message || "Something went wrong."
+        );
+      }
+
+      setSuccess(
+        "Your message has been sent successfully. We'll contact you soon."
+      );
+
+      setFormData({
+        name: "",
+        email: "",
+        subject: "",
+        message: "",
+      });
+    } catch (err) {
+      setError(
+        err.message || "Unable to send message. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="contactPage">
 
       {/* HERO */}
 
       <section className="contactHero">
+        <div className="contactHeroContent">
+          <p className="sectionLabel">GET IN TOUCH</p>
 
-        <p className="sectionLabel">
-          GET IN TOUCH
-        </p>
+          <h1>
+            Let&apos;s Build
+            <br />
+            <span>Something Great.</span>
+          </h1>
 
-        <h1>
-          Let's build
-          <br />
-          <span>something great.</span>
-        </h1>
-
-        <p>
-          Tell us about your idea, requirements and budget.
-          We'll get back to you and discuss the project.
-        </p>
-
+          <p className="contactHeroText">
+            Have a website idea, business project or
+            just want to discuss something? Tell us about
+            it and the VIDA WEB team will get back to you.
+          </p>
+        </div>
       </section>
 
 
-      {/* CONTACT AREA */}
+      {/* CONTACT SECTION */}
 
       <section className="contactSection">
 
-        <div className="contactContainer">
+        {/* LEFT SIDE */}
 
-          {/* LEFT */}
+        <div className="contactInfo">
 
-          <div className="contactInfo">
-
-            <p className="sectionLabel">
-              CONTACT US
-            </p>
+          <div className="contactInfoBlock">
+            <p className="sectionLabel">CONTACT</p>
 
             <h2>
-              Have a project
-              <span> in mind?</span>
+              Start a conversation
             </h2>
 
-            <p className="contactDescription">
-              Whether you need a business website, online store,
-              portfolio or custom web application, tell us what
-              you want to build.
+            <p>
+              Whether you need a business website,
+              portfolio, landing page or custom web
+              solution, we&apos;re here to help.
             </p>
+          </div>
 
 
-            <div className="contactDetails">
+          <div className="contactDetails">
 
-              <div className="contactDetail">
-                <span>Email</span>
-                <p>hello@vida-web.in</p>
-              </div>
+            <div className="contactDetail">
+              <span>EMAIL</span>
+              <a href="mailto:hello@vida-web.in">
+                hello@vida-web.in
+              </a>
+            </div>
 
-              <div className="contactDetail">
-                <span>Response Time</span>
-                <p>Within 24 hours</p>
-              </div>
+            <div className="contactDetail">
+              <span>RESPONSE TIME</span>
+              <p>
+                Usually within 24 hours
+              </p>
+            </div>
 
-              <div className="contactDetail">
-                <span>Working Hours</span>
-                <p>Mon - Sat / 10 AM - 7 PM</p>
-              </div>
-
+            <div className="contactDetail">
+              <span>AVAILABLE FOR</span>
+              <p>
+                Websites · Landing Pages ·
+                E-commerce · Custom Projects
+              </p>
             </div>
 
           </div>
 
-
-          {/* RIGHT FORM */}
-
-          <div className="contactFormBox">
-
-            <form className="contactForm">
-
-              <div className="formRow">
-
-                <div className="inputGroup">
-                  <label>Full Name</label>
-
-                  <input
-                    type="text"
-                    placeholder="Your name"
-                    required
-                  />
-                </div>
-
-                <div className="inputGroup">
-                  <label>Email</label>
-
-                  <input
-                    type="email"
-                    placeholder="you@example.com"
-                    required
-                  />
-                </div>
-
-              </div>
+        </div>
 
 
-              <div className="inputGroup">
-                <label>Phone Number</label>
+        {/* FORM */}
+
+        <div className="contactFormWrapper">
+
+          <form
+            className="contactForm"
+            onSubmit={handleSubmit}
+          >
+
+            <div className="formRow">
+
+              <div className="formGroup">
+                <label htmlFor="name">
+                  Your Name
+                </label>
 
                 <input
-                  type="tel"
-                  placeholder="Your phone number"
+                  id="name"
+                  type="text"
+                  name="name"
+                  placeholder="Enter your name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
                 />
               </div>
 
 
-              <div className="inputGroup">
-                <label>What do you want to build?</label>
+              <div className="formGroup">
+                <label htmlFor="email">
+                  Email Address
+                </label>
 
-                <select defaultValue="" required>
-
-                  <option value="" disabled>
-                    Select a service
-                  </option>
-
-                  <option value="business">
-                    Business Website
-                  </option>
-
-                  <option value="ecommerce">
-                    E-Commerce Website
-                  </option>
-
-                  <option value="portfolio">
-                    Portfolio Website
-                  </option>
-
-                  <option value="webapp">
-                    Custom Web Application
-                  </option>
-
-                  <option value="other">
-                    Something Else
-                  </option>
-
-                </select>
-
-              </div>
-
-
-              <div className="inputGroup">
-                <label>Budget</label>
-
-                <select defaultValue="" required>
-
-                  <option value="" disabled>
-                    Select your budget
-                  </option>
-
-                  <option value="15k">
-                    ₹15,000 - ₹20,000
-                  </option>
-
-                  <option value="20k">
-                    ₹20,000 - ₹30,000
-                  </option>
-
-                  <option value="30k">
-                    ₹30,000+
-                  </option>
-
-                  <option value="custom">
-                    Not Sure
-                  </option>
-
-                </select>
-
-              </div>
-
-
-              <div className="inputGroup">
-                <label>Project Details</label>
-
-                <textarea
-                  placeholder="Tell us about your project..."
-                  rows="6"
+                <input
+                  id="email"
+                  type="email"
+                  name="email"
+                  placeholder="you@example.com"
+                  value={formData.email}
+                  onChange={handleChange}
                   required
-                ></textarea>
-
+                />
               </div>
 
+            </div>
 
-              <button
-                type="submit"
-                className="contactButton"
-              >
-                Send Project Request →
-              </button>
 
-            </form>
+            <div className="formGroup">
+              <label htmlFor="subject">
+                Subject
+              </label>
 
-          </div>
+              <input
+                id="subject"
+                type="text"
+                name="subject"
+                placeholder="What do you want to discuss?"
+                value={formData.subject}
+                onChange={handleChange}
+              />
+            </div>
+
+
+            <div className="formGroup">
+              <label htmlFor="message">
+                Message
+              </label>
+
+              <textarea
+                id="message"
+                name="message"
+                placeholder="Tell us about your project..."
+                rows="7"
+                value={formData.message}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+
+            {success && (
+              <div className="contactSuccess">
+                {success}
+              </div>
+            )}
+
+
+            {error && (
+              <div className="contactError">
+                {error}
+              </div>
+            )}
+
+
+            <button
+              type="submit"
+              className="contactSubmit"
+              disabled={loading}
+            >
+              {loading
+                ? "Sending..."
+                : "Send Message →"}
+            </button>
+
+          </form>
 
         </div>
 
@@ -212,20 +258,19 @@ export default function ContactPage() {
       <section className="contactCTA">
 
         <p className="sectionLabel">
-          READY TO START?
+          VIDA WEB
         </p>
 
         <h2>
-          Your idea is
-          <span> one step away.</span>
+          Have an idea?
+          <br />
+          Let&apos;s make it real.
         </h2>
 
-        <Link
-          href="/signup"
-          className="primaryButton"
-        >
-          Create Your Account →
-        </Link>
+        <p>
+          Tell us what you need and we&apos;ll figure out
+          the best way to build it.
+        </p>
 
       </section>
 

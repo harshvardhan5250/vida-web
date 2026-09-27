@@ -1,13 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
-import {
-  onAuthStateChanged,
-} from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 import {
   collection,
-  getDocs,
+  onSnapshot,
   query,
   where,
   orderBy,
@@ -15,358 +12,170 @@ import {
 
 import { auth, db } from "../../../lib/firebase";
 
-export default function DashboardPaymentsPage() {
-  const [user, setUser] = useState(null);
+export default function PaymentsPage() {
   const [payments, setPayments] = useState([]);
-
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
 
   useEffect(() => {
-    let mounted = true;
+    let unsubscribePayments = null;
 
-    const unsubscribe = onAuthStateChanged(
+    const unsubscribeAuth = onAuthStateChanged(
       auth,
-      async (currentUser) => {
-        if (!currentUser) {
+      (user) => {
+        if (!user) {
           window.location.href = "/login";
           return;
         }
 
-        if (!mounted) return;
+        const paymentsQuery = query(
+          collection(db, "payments"),
+          where("userId", "==", user.uid),
+          orderBy("createdAt", "desc")
+        );
 
-        setUser(currentUser);
-
-        try {
-          const paymentsRef =
-            collection(db, "payments");
-
-          const paymentsQuery = query(
-            paymentsRef,
-            where("userId", "==", currentUser.uid),
-            orderBy("createdAt", "desc")
-          );
-
-          const snapshot =
-            await getDocs(paymentsQuery);
-
-          const data = snapshot.docs.map(
-            (doc) => ({
-              id: doc.id,
-              ...doc.data(),
-            })
-          );
-
-          if (mounted) {
-            setPayments(data);
-          }
-        } catch (err) {
-          console.error(
-            "Payments error:",
-            err
-          );
-
-          if (mounted) {
-            setError(
-              "Unable to load your payment records."
+        unsubscribePayments = onSnapshot(
+          paymentsQuery,
+          (snapshot) => {
+            const paymentData = snapshot.docs.map(
+              (doc) => ({
+                id: doc.id,
+                ...doc.data(),
+              })
             );
-          }
-        } finally {
-          if (mounted) {
+
+            setPayments(paymentData);
+            setLoading(false);
+          },
+          (error) => {
+            console.error("Payments error:", error);
             setLoading(false);
           }
-        }
+        );
       }
     );
 
     return () => {
-      mounted = false;
-      unsubscribe();
+      unsubscribeAuth();
+
+      if (unsubscribePayments) {
+        unsubscribePayments();
+      }
     };
   }, []);
 
-  const formatDate = (date) => {
-    if (!date) {
-      return "N/A";
-    }
-
-    try {
-      if (
-        typeof date.toDate === "function"
-      ) {
-        return date
-          .toDate()
-          .toLocaleString("en-IN");
-      }
-
-      return new Date(date).toLocaleString(
-        "en-IN"
-      );
-    } catch {
-      return "N/A";
-    }
-  };
-
-  if (!user) {
-    return (
-      <div className="authPage">
-        <div className="customersMessage">
-          Loading payments...
-        </div>
-      </div>
+  const totalPaid = payments
+    .filter(
+      (payment) =>
+        String(payment.status || "").toLowerCase() ===
+        "paid"
+    )
+    .reduce(
+      (total, payment) =>
+        total + Number(payment.amount || 0),
+      0
     );
-  }
 
   return (
-    <div className="adminCustomersPage">
+    <div className="dashboardPage">
 
-      {/* HEADER */}
+      <div className="dashboardHeader">
+        <p className="sectionLabel">MY ACCOUNT</p>
 
-      <div className="customersHeader">
+        <h1>Payments</h1>
 
-        <div>
-
-          <p className="sectionLabel">
-            CLIENT DASHBOARD
-          </p>
-
-          <h1>
-            Payments
-          </h1>
-
-          <p className="customersSubtitle">
-            View your website project
-            payment history.
-          </p>
-
-        </div>
-
-        <Link
-          href="/dashboard"
-          className="backButton"
-        >
-          ← Dashboard
-        </Link>
-
+        <p>
+          View your project payments and transaction history.
+        </p>
       </div>
 
+      <div className="dashboardStats">
 
-      {/* STATS */}
+        <div className="dashboardStatCard">
+          <span>Total Transactions</span>
+          <strong>{payments.length}</strong>
+        </div>
 
-      <div className="customerStats">
-
-        <div className="customerStatCard">
-
-          <span>
-            TOTAL PAYMENTS
-          </span>
-
+        <div className="dashboardStatCard">
+          <span>Total Paid</span>
           <strong>
-            {payments.length}
+            ₹{totalPaid.toLocaleString("en-IN")}
           </strong>
-
-        </div>
-
-
-        <div className="customerStatCard">
-
-          <span>
-            ACCOUNT
-          </span>
-
-          <strong
-            style={{
-              fontSize: "18px",
-              wordBreak: "break-word",
-            }}
-          >
-            {user.email}
-          </strong>
-
-        </div>
-
-
-        <div className="customerStatCard">
-
-          <span>
-            STATUS
-          </span>
-
-          <strong>
-            Active
-          </strong>
-
         </div>
 
       </div>
 
+      {loading ? (
+        <div className="dashboardEmpty">
+          <p>Loading payments...</p>
+        </div>
+      ) : payments.length === 0 ? (
+        <div className="dashboardEmpty">
+          <h2>No payments yet</h2>
 
-      {/* PAYMENT TABLE */}
+          <p>
+            Your project payments will appear here.
+          </p>
+        </div>
+      ) : (
+        <div className="dashboardTableWrapper">
 
-      <div className="customersTableContainer">
+          <table className="dashboardTable">
 
-        <div className="tableHeader">
+            <thead>
+              <tr>
+                <th>Project</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Payment ID</th>
+                <th>Date</th>
+              </tr>
+            </thead>
 
-          <h2>
-            Payment History
-          </h2>
+            <tbody>
 
-          <span>
-            {payments.length} records
-          </span>
+              {payments.map((payment) => (
+                <tr key={payment.id}>
+
+                  <td>
+                    {payment.projectName ||
+                      "Website Project"}
+                  </td>
+
+                  <td>
+                    ₹
+                    {Number(
+                      payment.amount || 0
+                    ).toLocaleString("en-IN")}
+                  </td>
+
+                  <td>
+                    <span className="statusBadge">
+                      {payment.status || "Pending"}
+                    </span>
+                  </td>
+
+                  <td>
+                    {payment.paymentId ||
+                      payment.id}
+                  </td>
+
+                  <td>
+                    {payment.createdAt?.toDate
+                      ? payment.createdAt
+                          .toDate()
+                          .toLocaleString()
+                      : "-"}
+                  </td>
+
+                </tr>
+              ))}
+
+            </tbody>
+
+          </table>
 
         </div>
-
-
-        {loading && (
-          <div className="customersMessage">
-            Loading payment history...
-          </div>
-        )}
-
-
-        {!loading && error && (
-          <div className="customersError">
-            {error}
-          </div>
-        )}
-
-
-        {!loading &&
-          !error &&
-          payments.length === 0 && (
-
-            <div className="customersMessage">
-
-              <p>
-                No payments found.
-              </p>
-
-              <p
-                style={{
-                  marginTop: "10px",
-                  fontSize: "13px",
-                  color: "#555",
-                }}
-              >
-                Your payment records will
-                appear here after a payment
-                is made.
-              </p>
-
-            </div>
-
-          )}
-
-
-        {!loading &&
-          !error &&
-          payments.length > 0 && (
-
-            <div className="tableWrapper">
-
-              <table className="customersTable">
-
-                <thead>
-
-                  <tr>
-                    <th>#</th>
-                    <th>Project</th>
-                    <th>Amount</th>
-                    <th>Status</th>
-                    <th>Transaction ID</th>
-                    <th>Date</th>
-                  </tr>
-
-                </thead>
-
-
-                <tbody>
-
-                  {payments.map(
-                    (payment, index) => (
-
-                      <tr key={payment.id}>
-
-                        <td>
-                          {index + 1}
-                        </td>
-
-
-                        <td>
-                          <strong>
-                            {payment.projectName ||
-                              payment.project ||
-                              "Website Project"}
-                          </strong>
-                        </td>
-
-
-                        <td>
-
-                          ₹
-                          {payment.amount ??
-                            payment.price ??
-                            "0"}
-
-                        </td>
-
-
-                        <td>
-
-                          <span
-                            style={{
-                              color:
-                                payment.status ===
-                                "success"
-                                  ? "#6ee7b7"
-                                  : payment.status ===
-                                    "failed"
-                                  ? "#ff7777"
-                                  : "#facc15",
-                              fontWeight: "600",
-                            }}
-                          >
-                            {payment.status ||
-                              "Pending"}
-                          </span>
-
-                        </td>
-
-
-                        <td>
-
-                          <span className="userId">
-
-                            {payment.paymentId ||
-                              payment.transactionId ||
-                              payment.id}
-
-                          </span>
-
-                        </td>
-
-
-                        <td>
-                          {formatDate(
-                            payment.createdAt
-                          )}
-                        </td>
-
-                      </tr>
-
-                    )
-                  )}
-
-                </tbody>
-
-              </table>
-
-            </div>
-
-          )}
-
-      </div>
+      )}
 
     </div>
   );
