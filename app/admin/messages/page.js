@@ -7,75 +7,54 @@ import {
   orderBy,
   query,
 } from "firebase/firestore";
-import {
-  onAuthStateChanged,
-} from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 
 import { auth, db } from "../../../lib/firebase";
 
 export default function AdminMessagesPage() {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const unsubscribeAuth = onAuthStateChanged(
-      auth,
-      (currentUser) => {
-        setUser(currentUser);
+    const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        setLoading(false);
+        return;
       }
-    );
+
+      const messagesQuery = query(
+        collection(db, "messages"),
+        orderBy("createdAt", "desc")
+      );
+
+      const unsubscribeMessages = onSnapshot(
+        messagesQuery,
+        (snapshot) => {
+          const data = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+
+          setMessages(data);
+          setLoading(false);
+        },
+        (error) => {
+          console.error("Messages error:", error);
+          setLoading(false);
+        }
+      );
+
+      return () => unsubscribeMessages();
+    });
 
     return () => unsubscribeAuth();
   }, []);
-
-  useEffect(() => {
-    if (!user) {
-      setLoading(false);
-      return;
-    }
-
-    const messagesQuery = query(
-      collection(db, "messages"),
-      orderBy("createdAt", "desc")
-    );
-
-    const unsubscribeMessages = onSnapshot(
-      messagesQuery,
-      (snapshot) => {
-        const messageData = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-
-        setMessages(messageData);
-        setLoading(false);
-      },
-      (error) => {
-        console.error("Messages error:", error);
-        setLoading(false);
-      }
-    );
-
-    return () => unsubscribeMessages();
-  }, [user]);
 
   if (loading) {
     return (
       <main className="dashboardPage">
         <div className="dashboardContainer">
-          <p>Loading messages...</p>
-        </div>
-      </main>
-    );
-  }
-
-  if (!user) {
-    return (
-      <main className="dashboardPage">
-        <div className="dashboardContainer">
-          <h1>Admin Messages</h1>
-          <p>Please login to access messages.</p>
+          <h1>Loading messages...</h1>
         </div>
       </main>
     );
@@ -87,13 +66,9 @@ export default function AdminMessagesPage() {
 
         <div className="dashboardHeader">
           <div>
-            <p className="sectionLabel">
-              ADMIN PANEL
-            </p>
+            <p className="sectionLabel">ADMIN PANEL</p>
 
-            <h1>
-              Customer Messages
-            </h1>
+            <h1>Customer Messages</h1>
 
             <p>
               View messages received from VIDA WEB customers.
@@ -123,12 +98,10 @@ export default function AdminMessagesPage() {
                     <th>Message</th>
                     <th>Project</th>
                     <th>Status</th>
-                    <th>Date</th>
                   </tr>
                 </thead>
 
                 <tbody>
-
                   {messages.map((message) => (
                     <tr key={message.id}>
 
@@ -145,9 +118,7 @@ export default function AdminMessagesPage() {
                       </td>
 
                       <td>
-                        <div className="messageTableText">
-                          {message.message || "N/A"}
-                        </div>
+                        {message.message || "N/A"}
                       </td>
 
                       <td>
@@ -155,22 +126,11 @@ export default function AdminMessagesPage() {
                       </td>
 
                       <td>
-                        <span className="statusBadge">
-                          {message.status || "Unread"}
-                        </span>
-                      </td>
-
-                      <td>
-                        {message.createdAt?.toDate
-                          ? message.createdAt
-                              .toDate()
-                              .toLocaleDateString("en-IN")
-                          : "—"}
+                        {message.status || "Unread"}
                       </td>
 
                     </tr>
                   ))}
-
                 </tbody>
 
               </table>
