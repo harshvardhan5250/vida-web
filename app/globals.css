@@ -1,0 +1,1628 @@
+/* =========================================================
+   GLOBAL RESET
+========================================================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #080808;
+  color: #ffffff;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
+}
+
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+.navbar {
+  width: 100%;
+  border-bottom: 1px solid #222;
+  background: #080808;
+}
+
+.navContainer {
+  max-width: 1200px;
+  margin: auto;
+  height: 75px;
+  padding: 0 25px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+
+.logo span,
+.footerBrand span {
+  color: #7c5cff;
+}
+
+.navLinks {
+  display: flex;
+  gap: 28px;
+}
+
+.navLinks a {
+  color: #aaa;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.navLinks a:hover {
+  color: #fff;
+}
+
+.navButtons {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.loginButton {
+  color: #fff;
+  padding: 10px 18px;
+}
+
+.signupButton,
+.primaryButton {
+  background: #7c5cff;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 8px;
+  display: inline-block;
+}
+
+.signupButton:hover,
+.primaryButton:hover {
+  opacity: 0.85;
+}
+
+
+/* =========================================================
+   HOME
+========================================================= */
+
+.hero {
+  min-height: 700px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+  padding: 80px 20px;
+
+  background: radial-gradient(
+    circle at center,
+    #17102d 0%,
+    #080808 55%
+  );
+}
+
+.heroContent {
+  max-width: 850px;
+}
+
+.heroTag {
+  color: #7c5cff;
+
+  font-size: 13px;
+  font-weight: bold;
+
+  letter-spacing: 2px;
+
+  margin-bottom: 25px;
+}
+
+.hero h1 {
+  font-size: clamp(55px, 9vw, 105px);
+  line-height: 0.95;
+  letter-spacing: -5px;
+}
+
+.hero h1 span {
+  color: #7c5cff;
+}
+
+.heroDescription {
+  max-width: 600px;
+
+  margin: 30px auto;
+
+  color: #aaa;
+
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+.heroButtons {
+  display: flex;
+  justify-content: center;
+
+  gap: 15px;
+
+  margin-top: 30px;
+}
+
+.secondaryButton {
+  border: 1px solid #333;
+
+  padding: 12px 20px;
+
+  border-radius: 8px;
+}
+
+
+/* =========================================================
+   HOME SERVICES
+========================================================= */
+
+.servicesPreview {
+  max-width: 1200px;
+
+  margin: auto;
+
+  padding: 120px 25px;
+}
+
+.sectionHeading {
+  margin-bottom: 50px;
+}
+
+.sectionHeading p,
+.sectionLabel {
+  color: #7c5cff;
+
+  font-size: 13px;
+  font-weight: bold;
+
+  letter-spacing: 2px;
+}
+
+.sectionHeading h2 {
+  margin-top: 15px;
+
+  font-size: 48px;
+}
+
+.sectionHeading h2 span {
+  color: #777;
+}
+
+.serviceGrid {
+  display: grid;
+
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 20px;
+}
+
+.serviceBox {
+  padding: 35px;
+
+  border: 1px solid #222;
+
+  border-radius: 14px;
+
+  background: #0d0d0d;
+}
+
+.serviceNumber {
+  color: #7c5cff;
+
+  margin-bottom: 30px;
+}
+
+.serviceBox h3 {
+  font-size: 25px;
+
+  margin-bottom: 12px;
+}
+
+.serviceBox p {
+  color: #888;
+
+  line-height: 1.6;
+}
+
+
+/* =========================================================
+   HOME PRICING
+========================================================= */
+
+.pricingPreview {
+  text-align: center;
+
+  padding: 120px 25px;
+
+  background: #0d0d0d;
+}
+
+.pricingPreview h2 {
+  font-size: 50px;
+
+  max-width: 750px;
+
+  margin: 20px auto;
+}
+
+.pricingPreview h2 span {
+  color: #7c5cff;
+}
+
+.pricingPreview p {
+  color: #888;
+
+  max-width: 600px;
+
+  margin: 0 auto 30px;
+
+  line-height: 1.6;
+}
+
+
+/* =========================================================
+   HOME CTA
+========================================================= */
+
+.ctaSection {
+  text-align: center;
+
+  padding: 130px 20px;
+}
+
+.ctaSection h2 {
+  font-size: 50px;
+
+  margin-bottom: 20px;
+}
+
+.ctaSection p {
+  color: #888;
+
+  margin-bottom: 30px;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.footer {
+  border-top: 1px solid #222;
+
+  padding: 70px 25px 25px;
+}
+
+.footerContainer {
+  max-width: 1200px;
+
+  margin: auto;
+
+  display: grid;
+
+  grid-template-columns: 2fr 1fr 1fr;
+
+  gap: 50px;
+}
+
+.footerBrand h2 {
+  font-size: 25px;
+}
+
+.footerBrand p {
+  max-width: 350px;
+
+  color: #777;
+
+  line-height: 1.6;
+
+  margin-top: 15px;
+}
+
+.footerLinks {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 12px;
+}
+
+.footerLinks h3 {
+  margin-bottom: 10px;
+}
+
+.footerLinks a {
+  color: #777;
+}
+
+.footerLinks a:hover {
+  color: #fff;
+}
+
+.copyright {
+  max-width: 1200px;
+
+  margin: 60px auto 0;
+
+  padding-top: 20px;
+
+  border-top: 1px solid #222;
+
+  color: #555;
+
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   AUTH
+========================================================= */
+
+.authPage {
+  min-height: calc(100vh - 75px);
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 60px 20px;
+
+  background: radial-gradient(
+    circle at 50% 20%,
+    #1b1235 0%,
+    #0b0b0b 45%,
+    #080808 100%
+  );
+}
+
+.authBox {
+  width: 100%;
+
+  max-width: 430px;
+
+  padding: 42px;
+
+  background: rgba(15, 15, 15, 0.95);
+
+  border: 1px solid #252525;
+
+  border-radius: 18px;
+
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+.authHeader {
+  text-align: center;
+
+  margin-bottom: 32px;
+}
+
+.authHeader h1 {
+  margin-bottom: 10px;
+
+  font-size: 34px;
+
+  line-height: 1.2;
+
+  letter-spacing: -1px;
+}
+
+.authHeader p {
+  color: #888;
+
+  font-size: 14px;
+}
+
+.authForm {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 19px;
+}
+
+.inputGroup {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 8px;
+}
+
+.inputGroup label {
+  color: #d0d0d0;
+
+  font-size: 13px;
+
+  font-weight: 500;
+}
+
+.inputGroup input {
+  width: 100%;
+
+  height: 48px;
+
+  padding: 0 14px;
+
+  background: #090909;
+
+  color: #fff;
+
+  border: 1px solid #292929;
+
+  border-radius: 9px;
+
+  outline: none;
+
+  font-size: 14px;
+}
+
+.inputGroup input::placeholder {
+  color: #555;
+}
+
+.inputGroup input:focus {
+  border-color: #7c5cff;
+
+  box-shadow:
+    0 0 0 3px rgba(124, 92, 255, 0.1);
+}
+
+.forgotPassword {
+  text-align: right;
+
+  margin-top: -8px;
+}
+
+.forgotPassword a {
+  color: #9b87ff;
+
+  font-size: 13px;
+}
+
+.authButton {
+  width: 100%;
+
+  height: 48px;
+
+  margin-top: 5px;
+
+  border: none;
+
+  border-radius: 9px;
+
+  background: #7c5cff;
+
+  color: #fff;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.authButton:hover {
+  background: #8b70ff;
+}
+
+.authFooter {
+  text-align: center;
+
+  margin-top: 25px;
+}
+
+.authFooter p {
+  color: #777;
+
+  font-size: 13px;
+}
+
+.authFooter a {
+  color: #9b87ff;
+}
+
+
+/* =========================================================
+   SERVICES PAGE
+========================================================= */
+
+.servicesHero {
+  text-align: center;
+
+  padding: 110px 20px 80px;
+
+  background: radial-gradient(
+    circle at center,
+    #17102d 0%,
+    #080808 60%
+  );
+}
+
+.servicesHero h1 {
+  margin-top: 20px;
+
+  font-size: clamp(48px, 8vw, 90px);
+
+  line-height: 0.98;
+
+  letter-spacing: -4px;
+}
+
+.servicesHero h1 span {
+  color: #7c5cff;
+}
+
+.servicesIntro {
+  max-width: 620px;
+
+  margin: 30px auto 0;
+
+  color: #888;
+
+  font-size: 17px;
+
+  line-height: 1.7;
+}
+
+.servicesList {
+  max-width: 1200px;
+
+  margin: auto;
+
+  padding: 80px 25px 120px;
+}
+
+.servicesGrid {
+  display: grid;
+
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 20px;
+}
+
+.serviceCard {
+  padding: 35px;
+
+  min-height: 300px;
+
+  background: #0d0d0d;
+
+  border: 1px solid #222;
+
+  border-radius: 16px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  transition: 0.25s;
+}
+
+.serviceCard:hover {
+  border-color: #7c5cff;
+
+  transform: translateY(-5px);
+}
+
+.serviceTop {
+  display: flex;
+
+  justify-content: space-between;
+
+  color: #7c5cff;
+
+  font-size: 14px;
+
+  font-weight: bold;
+}
+
+.serviceCard h2 {
+  margin-top: 55px;
+
+  font-size: 28px;
+}
+
+.serviceCard > p {
+  margin-top: 15px;
+
+  color: #888;
+
+  line-height: 1.6;
+}
+
+.serviceBottom {
+  margin-top: auto;
+
+  padding-top: 30px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  border-top: 1px solid #222;
+}
+
+.serviceBottom a {
+  color: #9b87ff;
+
+  font-size: 14px;
+}
+
+.servicesCTA {
+  text-align: center;
+
+  padding: 120px 20px;
+
+  background: #0d0d0d;
+}
+
+.servicesCTA h2 {
+  margin: 20px auto;
+
+  max-width: 700px;
+
+  font-size: clamp(40px, 6vw, 65px);
+
+  line-height: 1;
+}
+
+.servicesCTA h2 span {
+  color: #7c5cff;
+}
+
+.servicesCTA > p:not(.sectionLabel) {
+  max-width: 550px;
+
+  margin: 0 auto 30px;
+
+  color: #888;
+
+  line-height: 1.6;
+}
+
+
+/* =========================================================
+   PRICING PAGE
+========================================================= */
+
+.pricingHero {
+  text-align: center;
+
+  padding: 110px 20px 80px;
+
+  background: radial-gradient(
+    circle at center,
+    #17102d 0%,
+    #080808 60%
+  );
+}
+
+.pricingHero h1 {
+  margin-top: 20px;
+
+  font-size: clamp(48px, 8vw, 90px);
+
+  line-height: 0.98;
+
+  letter-spacing: -4px;
+}
+
+.pricingHero h1 span {
+  color: #7c5cff;
+}
+
+.pricingHero > p:not(.sectionLabel) {
+  max-width: 620px;
+
+  margin: 30px auto 0;
+
+  color: #888;
+
+  font-size: 17px;
+
+  line-height: 1.7;
+}
+
+.pricingCardsSection {
+  max-width: 1200px;
+
+  margin: auto;
+
+  padding: 70px 25px 120px;
+}
+
+.pricingCards {
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 20px;
+}
+
+.pricingCard {
+  position: relative;
+
+  padding: 35px;
+
+  background: #0d0d0d;
+
+  border: 1px solid #222;
+
+  border-radius: 16px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  transition: 0.25s;
+}
+
+.pricingCard:hover {
+  transform: translateY(-5px);
+
+  border-color: #444;
+}
+
+.popularPlan {
+  border-color: #7c5cff;
+}
+
+.popularBadge {
+  position: absolute;
+
+  top: -13px;
+
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  padding: 6px 14px;
+
+  border-radius: 20px;
+
+  background: #7c5cff;
+
+  color: #fff;
+
+  font-size: 10px;
+
+  font-weight: bold;
+
+  letter-spacing: 1px;
+
+  white-space: nowrap;
+}
+
+.pricingCardHeader p {
+  color: #9b87ff;
+
+  font-size: 14px;
+
+  font-weight: bold;
+
+  letter-spacing: 1px;
+}
+
+.pricingCardHeader h2 {
+  margin-top: 15px;
+
+  font-size: 42px;
+}
+
+.pricingCardHeader span {
+  display: block;
+
+  margin-top: 12px;
+
+  color: #777;
+
+  font-size: 14px;
+
+  line-height: 1.6;
+}
+
+.pricingFeatures {
+  margin-top: 35px;
+
+  padding-top: 25px;
+
+  border-top: 1px solid #222;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 15px;
+}
+
+.feature {
+  display: flex;
+
+  gap: 10px;
+
+  color: #aaa;
+
+  font-size: 14px;
+}
+
+.feature span {
+  color: #7c5cff;
+
+  font-weight: bold;
+}
+
+.pricingButton {
+  margin-top: 35px;
+
+  padding: 13px 20px;
+
+  text-align: center;
+
+  border: 1px solid #333;
+
+  border-radius: 8px;
+
+  color: #fff;
+
+  font-size: 14px;
+}
+
+.popularPlan .pricingButton {
+  background: #7c5cff;
+
+  border-color: #7c5cff;
+}
+
+.pricingCTA {
+  text-align: center;
+
+  padding: 120px 20px;
+
+  background: #0d0d0d;
+}
+
+.pricingCTA h2 {
+  margin: 20px auto;
+
+  max-width: 700px;
+
+  font-size: clamp(40px, 6vw, 65px);
+
+  line-height: 1;
+}
+
+.pricingCTA h2 span {
+  color: #7c5cff;
+}
+
+.pricingCTA > p:not(.sectionLabel) {
+  max-width: 550px;
+
+  margin: 0 auto 30px;
+
+  color: #888;
+
+  line-height: 1.6;
+}
+
+
+/* =========================================================
+   PORTFOLIO PAGE
+========================================================= */
+
+.portfolioHero {
+  text-align: center;
+
+  padding: 110px 20px 80px;
+
+  background: radial-gradient(
+    circle at center,
+    #17102d 0%,
+    #080808 60%
+  );
+}
+
+.portfolioHero h1 {
+  margin-top: 20px;
+
+  font-size: clamp(48px, 8vw, 90px);
+
+  line-height: 0.98;
+
+  letter-spacing: -4px;
+}
+
+.portfolioHero h1 span {
+  color: #7c5cff;
+}
+
+.portfolioHero > p:not(.sectionLabel) {
+  max-width: 620px;
+
+  margin: 30px auto 0;
+
+  color: #888;
+
+  font-size: 17px;
+
+  line-height: 1.7;
+}
+
+.portfolioList {
+  max-width: 1200px;
+
+  margin: auto;
+
+  padding: 80px 25px 120px;
+}
+
+.portfolioGrid {
+  display: grid;
+
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 25px;
+}
+
+.portfolioCard {
+  background: #0d0d0d;
+
+  border: 1px solid #222;
+
+  border-radius: 16px;
+
+  overflow: hidden;
+
+  transition: 0.25s;
+}
+
+.portfolioCard:hover {
+  transform: translateY(-5px);
+
+  border-color: #7c5cff;
+}
+
+.portfolioImage {
+  height: 300px;
+
+  position: relative;
+
+  padding: 25px;
+
+  background: radial-gradient(
+    circle at center,
+    #24164d 0%,
+    #111 55%,
+    #080808 100%
+  );
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+}
+
+.projectNumber {
+  position: absolute;
+
+  top: 20px;
+
+  left: 22px;
+
+  color: #7c5cff;
+
+  font-size: 13px;
+
+  font-weight: bold;
+}
+
+.projectCategory {
+  position: absolute;
+
+  top: 20px;
+
+  right: 22px;
+
+  color: #888;
+
+  font-size: 12px;
+
+  border: 1px solid #333;
+
+  padding: 6px 10px;
+
+  border-radius: 20px;
+}
+
+.projectMockup {
+  width: 75%;
+
+  height: 65%;
+
+  border: 1px solid #444;
+
+  border-radius: 10px;
+
+  background: #0b0b0b;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+.projectMockup span {
+  color: #7c5cff;
+
+  font-size: 18px;
+
+  font-weight: bold;
+
+  letter-spacing: 2px;
+}
+
+.portfolioContent {
+  padding: 30px;
+}
+
+.portfolioContent h2 {
+  font-size: 25px;
+
+  margin-bottom: 12px;
+}
+
+.portfolioContent p {
+  color: #888;
+
+  font-size: 14px;
+
+  line-height: 1.7;
+
+  margin-bottom: 20px;
+}
+
+.portfolioContent a {
+  color: #9b87ff;
+
+  font-size: 14px;
+}
+
+.portfolioCTA {
+  text-align: center;
+
+  padding: 120px 20px;
+
+  background: #0d0d0d;
+}
+
+.portfolioCTA h2 {
+  margin: 20px auto;
+
+  max-width: 700px;
+
+  font-size: clamp(40px, 6vw, 65px);
+
+  line-height: 1;
+}
+
+.portfolioCTA h2 span {
+  color: #7c5cff;
+}
+
+.portfolioCTA > p:not(.sectionLabel) {
+  max-width: 550px;
+
+  margin: 0 auto 30px;
+
+  color: #888;
+
+  line-height: 1.6;
+}
+
+
+/* =========================================================
+   CONTACT PAGE
+========================================================= */
+
+.contactHero {
+  text-align: center;
+
+  padding: 110px 20px 80px;
+
+  background: radial-gradient(
+    circle at center,
+    #17102d 0%,
+    #080808 60%
+  );
+}
+
+.contactHero h1 {
+  margin-top: 20px;
+
+  font-size: clamp(48px, 8vw, 90px);
+
+  line-height: 0.98;
+
+  letter-spacing: -4px;
+}
+
+.contactHero h1 span {
+  color: #7c5cff;
+}
+
+.contactHero > p:not(.sectionLabel) {
+  max-width: 620px;
+
+  margin: 30px auto 0;
+
+  color: #888;
+
+  font-size: 17px;
+
+  line-height: 1.7;
+}
+
+
+/* =========================================================
+   CONTACT SECTION
+========================================================= */
+
+.contactSection {
+  padding: 100px 25px 120px;
+}
+
+.contactContainer {
+  max-width: 1150px;
+
+  margin: auto;
+
+  display: grid;
+
+  grid-template-columns: 0.9fr 1.1fr;
+
+  gap: 70px;
+
+  align-items: start;
+}
+
+
+/* =========================================================
+   CONTACT INFO
+========================================================= */
+
+.contactInfo h2 {
+  margin-top: 20px;
+
+  font-size: clamp(40px, 5vw, 60px);
+
+  line-height: 1;
+}
+
+.contactInfo h2 span {
+  color: #7c5cff;
+}
+
+.contactDescription {
+  max-width: 500px;
+
+  margin-top: 25px;
+
+  color: #888;
+
+  line-height: 1.7;
+
+  font-size: 15px;
+}
+
+.contactDetails {
+  margin-top: 45px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 25px;
+}
+
+.contactDetail {
+  padding-bottom: 20px;
+
+  border-bottom: 1px solid #222;
+}
+
+.contactDetail span {
+  color: #777;
+
+  font-size: 12px;
+
+  text-transform: uppercase;
+
+  letter-spacing: 1px;
+}
+
+.contactDetail p {
+  margin-top: 7px;
+
+  color: #fff;
+
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   CONTACT FORM
+========================================================= */
+
+.contactFormBox {
+  padding: 35px;
+
+  background: #0d0d0d;
+
+  border: 1px solid #222;
+
+  border-radius: 16px;
+}
+
+.contactForm {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 20px;
+}
+
+.formRow {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 15px;
+}
+
+.contactForm select,
+.contactForm textarea {
+  width: 100%;
+
+  padding: 14px;
+
+  background: #090909;
+
+  color: #fff;
+
+  border: 1px solid #292929;
+
+  border-radius: 9px;
+
+  outline: none;
+
+  font-family: inherit;
+
+  font-size: 14px;
+}
+
+.contactForm select {
+  height: 48px;
+}
+
+.contactForm textarea {
+  resize: vertical;
+
+  min-height: 140px;
+}
+
+.contactForm select:focus,
+.contactForm textarea:focus {
+  border-color: #7c5cff;
+
+  box-shadow:
+    0 0 0 3px rgba(124, 92, 255, 0.1);
+}
+
+.contactForm select option {
+  background: #111;
+
+  color: #fff;
+}
+
+.contactButton {
+  width: 100%;
+
+  height: 50px;
+
+  border: none;
+
+  border-radius: 9px;
+
+  background: #7c5cff;
+
+  color: #fff;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.contactButton:hover {
+  background: #8b70ff;
+
+  transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   CONTACT CTA
+========================================================= */
+
+.contactCTA {
+  text-align: center;
+
+  padding: 120px 20px;
+
+  background: #0d0d0d;
+}
+
+.contactCTA h2 {
+  max-width: 700px;
+
+  margin: 20px auto 30px;
+
+  font-size: clamp(40px, 6vw, 65px);
+
+  line-height: 1;
+}
+
+.contactCTA h2 span {
+  color: #7c5cff;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+
+  .pricingCards {
+    grid-template-columns: 1fr;
+
+    max-width: 550px;
+
+    margin: auto;
+  }
+
+  .contactContainer {
+    grid-template-columns: 1fr;
+
+    gap: 50px;
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 768px) {
+
+  .navLinks {
+    display: none;
+  }
+
+  .hero h1 {
+    letter-spacing: -3px;
+  }
+
+  .heroButtons {
+    flex-direction: column;
+
+    align-items: center;
+  }
+
+  .serviceGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .servicesGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .portfolioGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .sectionHeading h2,
+  .pricingPreview h2,
+  .ctaSection h2 {
+    font-size: 38px;
+  }
+
+  .servicesHero h1,
+  .portfolioHero h1,
+  .contactHero h1 {
+    letter-spacing: -2px;
+  }
+
+  .serviceCard {
+    min-height: 280px;
+  }
+
+  .serviceCard h2 {
+    margin-top: 40px;
+  }
+
+  .portfolioImage {
+    height: 260px;
+  }
+
+  .footerContainer {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+  .authPage {
+    padding: 40px 15px;
+  }
+
+  .authBox {
+    padding: 30px 22px;
+
+    border-radius: 14px;
+  }
+
+  .authHeader h1 {
+    font-size: 29px;
+  }
+
+  .pricingHero h1,
+  .portfolioHero h1,
+  .contactHero h1 {
+    letter-spacing: -2px;
+  }
+
+  .pricingCard {
+    padding: 28px;
+  }
+
+  .pricingCardsSection {
+    padding-left: 15px;
+
+    padding-right: 15px;
+  }
+
+  .portfolioList {
+    padding-left: 15px;
+
+    padding-right: 15px;
+  }
+
+  .portfolioImage {
+    height: 230px;
+  }
+
+  .portfolioContent {
+    padding: 25px;
+  }
+
+  .pricingCTA,
+  .portfolioCTA,
+  .contactCTA {
+    padding: 90px 20px;
+  }
+
+  .contactSection {
+    padding-left: 15px;
+
+    padding-right: 15px;
+  }
+
+  .contactFormBox {
+    padding: 25px 20px;
+  }
+
+  .formRow {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+
+/* =========================================================
+   EXTRA SMALL MOBILE
+========================================================= */
+
+@media (max-width: 400px) {
+
+  .navContainer {
+    padding: 0 15px;
+  }
+
+  .logo {
+    font-size: 21px;
+  }
+
+  .navButtons {
+    gap: 5px;
+  }
+
+  .loginButton {
+    padding: 8px 10px;
+  }
+
+  .signupButton {
+    padding: 10px 12px;
+
+    font-size: 13px;
+  }
+
+  .hero {
+    padding-left: 15px;
+
+    padding-right: 15px;
+  }
+
+  .hero h1 {
+    font-size: 48px;
+  }
+
+  .heroDescription {
+    font-size: 16px;
+  }
+
+  .authBox {
+    padding: 25px 18px;
+  }
+
+  .contactFormBox {
+    padding: 20px 15px;
+  }
+
+}
