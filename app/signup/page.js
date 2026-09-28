@@ -2,11 +2,17 @@
 
 import { useState } from "react";
 import Link from "next/link";
+
 import {
   createUserWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
-import { doc, setDoc, serverTimestamp } from "firebase/firestore";
+
+import {
+  doc,
+  setDoc,
+  serverTimestamp,
+} from "firebase/firestore";
 
 import { auth, db } from "../../lib/firebase";
 
@@ -14,8 +20,7 @@ export default function SignupPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] =
-    useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -25,66 +30,167 @@ export default function SignupPage() {
 
     setError("");
 
+    const cleanName = name.trim();
+    const cleanEmail = email.trim();
+
+    if (!cleanName) {
+      setError("Please enter your full name.");
+      return;
+    }
+
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
       return;
     }
 
     if (password.length < 6) {
-      setError(
-        "Password must be at least 6 characters."
-      );
+      setError("Password must be at least 6 characters.");
       return;
     }
 
     setLoading(true);
 
     try {
-      // Create Firebase account
-      const userCredential =
-        await createUserWithEmailAndPassword(
-          auth,
-          email.trim(),
-          password
-        );
+      console.log("1. Starting Firebase signup...");
+
+      // --------------------------------
+      // 1. CREATE FIREBASE ACCOUNT
+      // --------------------------------
+
+      const authPromise = createUserWithEmailAndPassword(
+        auth,
+        cleanEmail,
+        password
+      );
+
+      const authTimeout = new Promise((_, reject) =>
+        setTimeout(
+          () =>
+            reject(
+              new Error(
+                "Firebase Authentication is taking too long. Please check the Firebase/Vercel connection."
+              )
+            ),
+          15000
+        )
+      );
+
+      const userCredential = await Promise.race([
+        authPromise,
+        authTimeout,
+      ]);
 
       const user = userCredential.user;
 
-      // Save name in Firebase Authentication
+      console.log("2. Firebase account created:", user.uid);
+
+      // --------------------------------
+      // 2. UPDATE USER NAME
+      // --------------------------------
+
       await updateProfile(user, {
-        displayName: name.trim(),
+        displayName: cleanName,
       });
 
-      // Save customer data in Firestore
-      await setDoc(doc(db, "users", user.uid), {
-        name: name.trim(),
-        email: user.email,
-        uid: user.uid,
-        createdAt: serverTimestamp(),
-      });
+      console.log("3. Firebase profile updated.");
 
-      // Go to dashboard
+      // --------------------------------
+      // 3. SAVE USER TO FIRESTORE
+      // --------------------------------
+
+      const firestorePromise = setDoc(
+        doc(db, "users", user.uid),
+        {
+          name: cleanName,
+          email: user.email,
+          uid: user.uid,
+          createdAt: serverTimestamp(),
+        }
+      );
+
+      const firestoreTimeout = new Promise((_, reject) =>
+        setTimeout(
+          () =>
+            reject(
+              new Error(
+                "Firestore is taking too long to respond. Your Firebase Authentication may be working, but Firestore is not connecting."
+              )
+            ),
+          15000
+        )
+      );
+
+      await Promise.race([
+        firestorePromise,
+        firestoreTimeout,
+      ]);
+
+      console.log("4. User saved to Firestore.");
+
+      // --------------------------------
+      // 4. DASHBOARD
+      // --------------------------------
+
       window.location.href = "/dashboard";
-    } catch (err) {
-      console.error("Signup error:", err);
 
-      if (err.code === "auth/email-already-in-use") {
+    } catch (err) {
+      console.error("SIGNUP ERROR:", err);
+      console.error("ERROR CODE:", err?.code);
+      console.error("ERROR MESSAGE:", err?.message);
+
+      if (err?.code === "auth/email-already-in-use") {
         setError(
           "An account already exists with this email."
         );
-      } else if (err.code === "auth/invalid-email") {
+      }
+
+      else if (err?.code === "auth/invalid-email") {
         setError(
           "Please enter a valid email address."
         );
-      } else if (err.code === "auth/weak-password") {
+      }
+
+      else if (err?.code === "auth/weak-password") {
         setError(
           "Password is too weak. Use at least 6 characters."
         );
-      } else {
+      }
+
+      else if (err?.code === "auth/network-request-failed") {
         setError(
-          "Unable to create account. Please try again."
+          "Firebase cannot connect to the server. Please check the Firebase/Vercel configuration."
         );
       }
+
+      else if (
+        err?.message?.includes("Authentication is taking too long")
+      ) {
+        setError(
+          "Firebase Authentication is not responding. Please check your Firebase/Vercel configuration."
+        );
+      }
+
+      else if (
+        err?.message?.includes("Firestore is taking too long")
+      ) {
+        setError(
+          "Firebase Authentication worked, but Firestore is not responding."
+        );
+      }
+
+      else if (err?.code === "permission-denied") {
+        setError(
+          "Firestore permission denied. Please check Firestore Security Rules."
+        );
+      }
+
+      else {
+        setError(
+          err?.message ||
+            "Unable to create account. Please try again."
+        );
+      }
+
     } finally {
       setLoading(false);
     }
@@ -94,8 +200,6 @@ export default function SignupPage() {
     <div className="authPage">
 
       <div className="authCard">
-
-        {/* HEADER */}
 
         <div className="authHeader">
 
@@ -114,16 +218,12 @@ export default function SignupPage() {
 
         </div>
 
-
-        {/* FORM */}
-
         <form
           className="authForm"
           onSubmit={handleSignup}
         >
 
           <div className="formGroup">
-
             <label htmlFor="name">
               Full Name
             </label>
@@ -138,12 +238,9 @@ export default function SignupPage() {
               }
               required
             />
-
           </div>
 
-
           <div className="formGroup">
-
             <label htmlFor="email">
               Email Address
             </label>
@@ -158,12 +255,9 @@ export default function SignupPage() {
               }
               required
             />
-
           </div>
 
-
           <div className="formGroup">
-
             <label htmlFor="password">
               Password
             </label>
@@ -178,12 +272,9 @@ export default function SignupPage() {
               }
               required
             />
-
           </div>
 
-
           <div className="formGroup">
-
             <label htmlFor="confirmPassword">
               Confirm Password
             </label>
@@ -198,20 +289,13 @@ export default function SignupPage() {
               }
               required
             />
-
           </div>
-
-
-          {/* ERROR */}
 
           {error && (
             <div className="contactError">
               {error}
             </div>
           )}
-
-
-          {/* BUTTON */}
 
           <button
             type="submit"
@@ -225,11 +309,7 @@ export default function SignupPage() {
 
         </form>
 
-
-        {/* FOOTER */}
-
         <div className="authFooter">
-
           <p>
             Already have an account?
           </p>
@@ -237,7 +317,6 @@ export default function SignupPage() {
           <Link href="/login">
             Login →
           </Link>
-
         </div>
 
       </div>
