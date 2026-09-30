@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
-import { auth } from "../../lib/firebase";
+import { auth, db } from "../../lib/firebase";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
